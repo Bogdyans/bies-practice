@@ -13,7 +13,7 @@ export default function DefaultButton(
     const [hoverBg, setHoverBg] = useState<string>("")
 
     useEffect(() => {
-        setHoverBg(darkenColor(bg, 10))
+        setHoverBg(darkenColor(bg, 20))
     }, [bg]);
 
     return (
