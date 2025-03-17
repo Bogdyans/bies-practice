@@ -12,7 +12,7 @@ export default function MenuServiceButton(
 ) {
     const [isTouching, setIsTouching] = useState<boolean>(false);
 
-    const handleInfoClick = (e: MouseEvent) => {
+    const handleInfoClick = (e: React.MouseEvent) => {
         e.preventDefault()
         e.stopPropagation()
         showDesc(description)
