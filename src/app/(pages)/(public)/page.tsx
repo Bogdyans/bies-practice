@@ -11,6 +11,7 @@ import MenuServiceButton from "@/components/shared/menu-service-button";
 import {NEWS_TITLE_DATA} from "@/constants/mock/news-title-data";
 import NewsTitle from "@/components/shared/menu-news-title";
 import Header from "@/components/mobile/header";
+import DefaultButton from "@/components/shared/button";
 
 export default function PromtehApp() {
     const router = useRouter()
@@ -25,12 +26,10 @@ export default function PromtehApp() {
     }
 
     return (
-        <div className="max-w-md mx-auto bg-white min-h-screen flex flex-col">
-
+        <div className="max-w-md mx-auto bg-white min-h-screen flex flex-col gap-y-3">
 
             {/* Header */}
             <Header />
-
 
             {/* Service Categories Grid */}
             <div className="grid grid-cols-2 gap-4 p-4">
@@ -46,23 +45,19 @@ export default function PromtehApp() {
                 ))}
             </div>
 
-
             {/* Action Buttons */}
             <div className="px-4 space-y-3 mb-6">
-                <button
-                    className="w-full bg-[#e30613] text-white py-4 rounded-lg font-medium"
+                <DefaultButton
+                    content={'Гид нового сотрудника'}
+                    bg={"#e30613"}
                     onClick={() => router.push("/guide")}
-                >
-                    Гид нового сотрудника
-                </button>
-                <button
-                    className="w-full bg-[#b6b6b6] text-white py-4 rounded-lg font-medium"
+                />
+                <DefaultButton
+                    content={'Мне только спросить!'}
+                    bg={"#b6b6b6"}
                     onClick={() => router.push("/ask")}
-                >
-                    &#34;Мне только спросить!&#34;
-                </button>
+                />
             </div>
-
 
             {/* News Section */}
             <div className="px-4 mb-4 flex-grow">
@@ -81,10 +76,8 @@ export default function PromtehApp() {
                 
             </div>
 
-
             {/* Bottom Navigation - Fixed to bottom */}
             <BottomMenu />
-
 
             {/* Info Tooltip/Modal */}
             {activeDescription && (
