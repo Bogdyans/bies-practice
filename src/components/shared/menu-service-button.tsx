@@ -12,6 +12,13 @@ export default function MenuServiceButton(
 ) {
     const [isTouching, setIsTouching] = useState<boolean>(false);
 
+    const handleInfoClick = (e: MouseEvent) => {
+        e.preventDefault()
+        e.stopPropagation()
+        showDesc(description)
+    }
+
+
     return (
         <Link
             className={`bg-[#f5f5f5] rounded-lg p-4 relative h-24 w-full text-left
@@ -27,8 +34,7 @@ export default function MenuServiceButton(
 
 
             {
-                iconPath.trim().length > 0?
-                (
+                iconPath.trim().length > 0? (
                     <div className="absolute bottom-8 right-2">
                         <Image
                             src={iconPath}
@@ -43,14 +49,12 @@ export default function MenuServiceButton(
 
 
             {
-                description.trim().length > 0 ?
-                    (
+                description.trim().length > 0 ? (
                         <button
-                            className="absolute bottom-2 right-2 w-6 h-6 rounded-full border border-[#bbbbbb] flex items-center justify-center text-[#bbbbbb]"
-                            onClick={(e) => {
-                                e.stopPropagation()
-                                showDesc(description)
-                            }}
+                            className="absolute bottom-2 right-2 w-6 h-6 rounded-full border border-2 border-[#bbbbbb] flex items-center justify-center text-[#bbbbbb]
+                                       hover:border-[#e30613] hover:text-[#e30613] transition-colors
+                                      "
+                            onClick={handleInfoClick}
                         >
                             i
                         </button>
