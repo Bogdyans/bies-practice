@@ -16,11 +16,6 @@ export default function PromtehApp() {
     const router = useRouter()
     const [activeDescription, setActiveDescription] = useState<string | null>(null)
 
-
-    const handleCategoryClick = (route: string) => {
-        router.push(`/${route}`)
-    }
-
     const showTooltip = (description: string) => {
         setActiveDescription(description)
     }
@@ -46,6 +41,7 @@ export default function PromtehApp() {
                         description={data.description}
                         iconPath={data.iconPath}
                         showDesc={showTooltip}
+                        href={data.href}
                     />
                 ))}
             </div>

@@ -1,15 +1,27 @@
+"use client"
+
 import Image from "next/image";
+import Link from "next/link";
+import {useState} from "react";
 
 
 export default function MenuServiceButton(
-        { title, description, iconPath, showDesc }
+        { title, description, iconPath, href, showDesc }
         :
-        { title: string, description: string, iconPath: string, showDesc: (arg0: string) => void }
+        { title: string, description: string, iconPath: string, href: string, showDesc: (arg0: string) => void }
 ) {
+    const [isTouching, setIsTouching] = useState<boolean>(false);
+
     return (
-        <button
-            onClick={() => handleCategoryClick("training")}
-            className="bg-[#f5f5f5] rounded-lg p-4 relative h-24 w-full text-left"
+        <Link
+            className={`bg-[#f5f5f5] rounded-lg p-4 relative h-24 w-full text-left
+                       hover:shadow-md transition-shadow
+                       ${isTouching ? "shadow-md" : ""}
+                      `}
+            href={href}
+            onTouchStart={() => setIsTouching(true)}
+            onTouchEnd={() => setIsTouching(false)}
+            onTouchCancel={() => setIsTouching(false)}
         >
             <div className="font-medium">{title}</div>
 
@@ -45,6 +57,6 @@ export default function MenuServiceButton(
                     ) : null
             }
 
-        </button>
+        </Link>
     )
 }
