@@ -1,31 +1,35 @@
 'use client'
 
 import darkenColor from "@/utils/funcs/darkenColor";
-import {useEffect, useState} from "react";
+import { useState } from "react";
 
-
-//Данная кнопка сама считает для себя затемнение при наведении
 export default function DefaultButton(
-    { content, bg, onClick, className }
+        { content, bg, onClick, className }
         :
         { content: string, bg: string, onClick: () => void, className?: string }
 ) {
-    const [hoverBg, setHoverBg] = useState<string>("")
-
-    useEffect(() => {
-        setHoverBg(darkenColor(bg, 20))
-    }, [bg]);
+    const [isBgDarker, setIsBgDarker] = useState<boolean>(false);
+    const hoverBg = darkenColor(bg, 20);
 
     return (
         <button
-            className={`w-full text-white bg-[${bg}] py-4 rounded-lg font-medium transition-colors ${className || ""}`}
-
-            //Оно только так динамически работает, я хз что делать
+            className={`w-full cursor-pointer text-white py-4 rounded-lg font-medium transition-colors
+                        ${className || ""}
+                      `}
+            style={{
+                backgroundColor: isBgDarker ? hoverBg : bg,
+                transition: "background-color 0.2s ease-in-out"
+            }}
             onClick={onClick}
-            onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = hoverBg)}
-            onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = bg)}
+
+            onTouchStart={() => setIsBgDarker(true)}
+            onTouchEnd={() => setIsBgDarker(false)}
+            onTouchCancel={() => setIsBgDarker(false)}
+
+            onMouseEnter={() => setIsBgDarker(true)}
+            onMouseLeave={() => setIsBgDarker(false)}
         >
             {content}
         </button>
-    )
+    );
 }
