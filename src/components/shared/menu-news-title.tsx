@@ -1,5 +1,6 @@
 import Image from "next/image";
 import {useState} from "react";
+import darkenColor from "@/utils/funcs/darkenColor";
 
 
 export default function NewsTitle(
@@ -20,15 +21,15 @@ export default function NewsTitle(
              onTouchCancel={() => setIsTouching(false)}
         >
             <div className="p-4">
-                <h3 className="font-medium mb-1">{title}</h3>
+                <h3 className="font-medium mb-1 cursor-pointer">{title}</h3>
                 <div className="flex justify-between items-center text-[#a4a4a4] text-sm">
-                    <span>Читать далее</span>
-                    <span>{date}</span>
+                    <span className="cursor-pointer hover:text-[#d84a4a] hover:drop-shadow-md transition-all duration-300">Читать далее</span>
+                    <span className="select-none">{date}</span>
                 </div>
             </div>
             <div className="w-full h-48 relative">
                 <Image src={currentImage} alt="Award ceremony" fill className="object-cover"/>
-                <div className="absolute bottom-2 left-2 bg-white/80 px-2 py-1 text-xs rounded">Фото: 1 из {photos.length}</div>
+                <div className="absolute bottom-2 left-2 bg-white/80 px-2 py-1 text-xs rounded select-none">Фото: 1 из {photos.length}</div>
             </div>
         </div>
     )
