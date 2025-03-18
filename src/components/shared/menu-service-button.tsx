@@ -53,6 +53,7 @@ export default function MenuServiceButton(
                         <button
                             className="absolute bottom-2 right-2 w-6 h-6 rounded-full border border-2 border-[#bbbbbb] flex items-center justify-center text-[#bbbbbb]
                                        hover:border-[#e30613] hover:text-[#e30613] transition-colors
+                                       cursor-pointer
                                       "
                             onClick={handleInfoClick}
                         >
