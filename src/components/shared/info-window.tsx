@@ -41,18 +41,18 @@ export default function InfoWindow(
 
     return (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" >
-            <div className="bg-white rounded-lg p-6 max-w-sm w-full relative gap-y-4" ref={modalRef}>
+            <div className="bg-white rounded-lg p-4 max-w-sm w-full relative" ref={modalRef}>
                 <XButton onClick={onClose} className="absolute top-4 right-4 p-1"/>
 
                 <h3 className="font-bold text-lg mb-2">Информация</h3>
 
-                <p className="my-4">{content}</p>
+                <p className="my-3">{content}</p>
 
                 <DefaultButton
                     content={"Закрыть"}
                     bg={"#e30613"}
                     onClick={onClose}
-                    className="mt-4 py-2 px-4 rounded-lg"
+                    className="mt-2 py-2 px-4 rounded-lg"
                 />
 
             </div>
