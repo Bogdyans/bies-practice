@@ -12,6 +12,7 @@ import {NEWS_TITLE_DATA} from "@/constants/mock/news-title-data";
 import NewsTitle from "@/components/shared/menu-news-title";
 import Header from "@/components/mobile/header";
 import DefaultButton from "@/components/shared/button";
+import InfoWindow from "@/components/shared/info-window";
 
 export default function PromtehApp() {
     const router = useRouter()
@@ -80,20 +81,9 @@ export default function PromtehApp() {
             <BottomMenu />
 
             {/* Info Tooltip/Modal */}
-            {activeDescription && (
-                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-                    <div className="bg-white rounded-lg p-6 max-w-sm w-full relative">
-                        <button onClick={closeTooltip} className="absolute top-2 right-2 p-1">
-                            <X className="w-5 h-5" />
-                        </button>
-                        <h3 className="font-bold text-lg mb-2">Информация</h3>
-                        <p>{activeDescription}</p>
-                        <button onClick={closeTooltip} className="mt-4 bg-[#e30613] text-white py-2 px-4 rounded-lg w-full">
-                            Закрыть
-                        </button>
-                    </div>
-                </div>
-            )}
+            <InfoWindow content={activeDescription}
+                        onClose={closeTooltip}
+            />
         </div>
     )
 }
