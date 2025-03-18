@@ -1,6 +1,7 @@
 import {X} from "lucide-react";
 import {useEffect, useRef} from "react";
-import DefaultButton from "@/components/shared/button";
+import DefaultButton from "@/components/shared/buttons/button";
+import XButton from "@/components/shared/buttons/x-button";
 
 
 export default function InfoWindow(
@@ -40,12 +41,13 @@ export default function InfoWindow(
 
     return (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" >
-            <div className="bg-white rounded-lg p-6 max-w-sm w-full relative" ref={modalRef}>
-                <button onClick={onClose} className="cursor-pointer absolute top-2 right-2 p-1">
-                    <X className="w-5 h-5"/>
-                </button>
+            <div className="bg-white rounded-lg p-6 max-w-sm w-full relative gap-y-4" ref={modalRef}>
+                <XButton onClick={onClose} className="absolute top-4 right-4 p-1"/>
+
                 <h3 className="font-bold text-lg mb-2">Информация</h3>
-                <p>{content}</p>
+
+                <p className="my-4">{content}</p>
+
                 <DefaultButton
                     content={"Закрыть"}
                     bg={"#e30613"}
