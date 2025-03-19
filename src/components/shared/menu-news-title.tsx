@@ -17,8 +17,6 @@ export default function NewsTitle(
         return () => clearInterval(interval);
     }, [photos.length]);
 
-    const currentImage = photos[currentImageIndex];
-
     return (
         <div className={`bg-[#f5f5f5] rounded-lg mb-4 overflow-hidden
                         hover:shadow-lg transition-shadow
@@ -31,7 +29,7 @@ export default function NewsTitle(
             <div className="p-4">
                 <h3 className="font-medium mb-1 cursor-pointer">{title}</h3>
                 <div className="flex justify-between items-center text-[#a4a4a4] text-sm">
-                    <span className="cursor-pointer hover:text-[#d84a4a] hover:drop-shadow-md transition-all duration-300">Читать далее</span>
+                    <span className="cursor-pointer hover:text-[#e30613] hover:drop-shadow-md transition-all duration-300">Читать далее</span>
                     <span className="select-none">{date}</span>
                 </div>
             </div>
