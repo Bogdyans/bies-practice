@@ -1,15 +1,23 @@
 import Image from "next/image";
-import {useState} from "react";
-import darkenColor from "@/utils/funcs/darkenColor";
-
+import {useState, useEffect} from "react";
 
 export default function NewsTitle(
         {title, date, photos}
         :
         { title: string, date: string, photos: string[] }
 ) {
-    const [currentImage, setCurrentImage] = useState<string>(photos[0]);
+    const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
     const [isTouching, setIsTouching] = useState<boolean>(false);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setCurrentImageIndex((prevIndex) => (prevIndex + 1) % photos.length);
+        }, 5000);
+
+        return () => clearInterval(interval);
+    }, [photos.length]);
+
+    const currentImage = photos[currentImageIndex];
 
     return (
         <div className={`bg-[#f5f5f5] rounded-lg mb-4 overflow-hidden
@@ -27,9 +35,23 @@ export default function NewsTitle(
                     <span className="select-none">{date}</span>
                 </div>
             </div>
-            <div className="w-full h-48 relative">
-                <Image src={currentImage} alt="Award ceremony" fill className="object-cover"/>
-                <div className="absolute bottom-2 left-2 bg-white/80 px-2 py-1 text-xs rounded select-none">Фото: 1 из {photos.length}</div>
+            <div className="w-full h-48 relative overflow-hidden">
+                <div className="flex transition-transform duration-500 ease-in-out"
+                style={{ transform: `translateX(-${currentImageIndex * 100}%)` }}>
+                    {photos.map((photo, index) => (
+                        <div key={index} className="w-full h-48 flex-shrink-0 relative">
+                            <Image
+                                src={photo}
+                                alt={title}
+                                fill
+                                className="object-cover"
+                            />
+                        </div>
+                    ))}
+                </div>
+                <div className="absolute bottom-2 left-2 bg-white/80 px-2 py-1 text-xs rounded select-none">
+                    Фото: {currentImageIndex + 1} из {photos.length}
+                </div>
             </div>
         </div>
     )
