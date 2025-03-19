@@ -1,4 +1,4 @@
-import { getUserById } from '@/app/api/models/m_user';
+import { getUserById } from '@/app/api/models/user';
 import { NextResponse } from 'next/server';
 import pool from '@/app/api/controllers/connect_to_bd/conectToBd';
 
