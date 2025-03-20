@@ -14,13 +14,13 @@ export default function InfoWindow(
     useEffect(() => {
         if (!content) return;
 
-        const handleOutsideClick = (event) => {
-            if (modalRef.current && !modalRef.current.contains(event.target)) {
+        const handleOutsideClick = (event: PointerEvent) => {
+            if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
                 onClose()
             }
         };
 
-        const handleEscapePress = (event) => {
+        const handleEscapePress = (event: KeyboardEvent) => {
             if (event.key === "Escape") {
                 onClose()
             }
