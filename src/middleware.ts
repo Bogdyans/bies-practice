@@ -29,22 +29,25 @@ export async function middleware(request: NextRequest) {
     let token = ""
 
     if (authHeader && authHeader.startsWith("Bearer ")) {
-        // Extract token from Bearer authorization header
         token = authHeader.substring(7)
     } else {
         // Fallback to cookie if no Authorization header
         token = request.cookies.get("token")?.value || ""
     }
 
+    if (!token) {
+        return NextResponse.json({ message: "Unauthorized" }, { status: 401 })
+    }
+
+
     try {
-        if (!token) {
-            throw new Error("No token found")
-        }
 
         await jwtVerify(token, JWT_SECRET)
+
         return NextResponse.next()
     } catch (error) {
         console.log(error)
+
         return NextResponse.json({ message: "Unauthorized" }, { status: 401 })
     }
 }
