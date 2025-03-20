@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 import { fetchNews } from '@/app/api/controllers/news/getNews';
 
 export async function POST(request: Request) {
-  try {
+  try { //ффф
     const userIdJson = await request.json();
     const result = await fetchNews(userIdJson.token); 
 
