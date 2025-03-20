@@ -28,7 +28,6 @@ export default function BottomMenu() {
                     <span className="text-xs">Профиль</span>
                 </Link>
             </div>
-            <div className="h-1 w-1/5 mx-auto bg-black rounded-full mb-2"></div>
         </div>
     )
 }

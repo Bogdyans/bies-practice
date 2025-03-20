@@ -26,12 +26,7 @@ export default function PromtehApp() {
     }
 
     return (
-        <div className="max-w-md mx-auto bg-white min-h-screen flex flex-col gap-y-3">
-
-            {/* Header */}
-            <Header />
-
-            {/* Service Categories Grid */}
+        <>
             <div className="grid grid-cols-2 gap-4 p-4">
                 {MENU_SERVICE_BUTTON_DATA.map((data) => (
                     <MenuServiceButton
@@ -73,17 +68,12 @@ export default function PromtehApp() {
                         />
                     ))
                 }
-                
+                {/* Info Tooltip/Modal */}
+                <InfoWindow content={activeDescription}
+                            onClose={closeTooltip}
+                />
             </div>
-
-            {/* Bottom Navigation - Fixed to bottom */}
-            <BottomMenu />
-
-            {/* Info Tooltip/Modal */}
-            <InfoWindow content={activeDescription}
-                        onClose={closeTooltip}
-            />
-        </div>
+        </>
     )
 }
 
