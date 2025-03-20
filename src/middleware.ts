@@ -17,26 +17,19 @@ export async function middleware(request: NextRequest) {
         return NextResponse.next()
     }
 
-    const isApiRoute = path.startsWith("/api/")
-
-    // For client-side routes, we'll rely on the client-side auth check
-    // For API routes and server components, we need to verify the token
-    if (!isApiRoute) {
-        return NextResponse.next()
-    }
 
     const authHeader = request.headers.get("authorization")
-    let token = ""
+    let token = request.cookies.get("token")?.value || ""
 
     if (authHeader && authHeader.startsWith("Bearer ")) {
         token = authHeader.substring(7)
-    } else {
-        // Fallback to cookie if no Authorization header
-        token = request.cookies.get("token")?.value || ""
     }
 
     if (!token) {
-        return NextResponse.json({ message: "Unauthorized" }, { status: 401 })
+        if (path.startsWith("/api")) {
+            return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+        }
+        return NextResponse.redirect(new URL("/login", request.url));
     }
 
 
@@ -46,9 +39,12 @@ export async function middleware(request: NextRequest) {
 
         return NextResponse.next()
     } catch (error) {
-        console.log(error)
+        console.log(error);
 
-        return NextResponse.json({ message: "Unauthorized" }, { status: 401 })
+        const response = NextResponse.redirect(new URL("/login", request.url));
+        response.cookies.delete("token");
+
+        return response;
     }
 }
 

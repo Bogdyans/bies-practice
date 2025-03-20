@@ -33,7 +33,13 @@ export async function POST(request: Request) {
             .setExpirationTime("24h") // Token expires in 24 hours
             .sign(JWT_SECRET)
 
-        return NextResponse.json({ token })
+        const response = NextResponse.json({ token });
+        response.cookies.set("token", token, {
+            httpOnly: true,
+            maxAge: 24 * 60 * 60 // 24 часа
+        });
+
+        return response;
     } catch (error) {
         console.error("Login error:", error)
         return NextResponse.json({ message: "Internal server error" }, { status: 500 })

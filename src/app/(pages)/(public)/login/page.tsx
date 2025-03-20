@@ -36,10 +36,11 @@ export default function LoginPage() {
             }
 
             localStorage.setItem("token", data.token)
+            document.cookie = `token=${data.token}; path=/; max-age=${24 * 60 * 60}`; // 24 часа
 
             router.push("/")
-        } catch (err: any) {
-            setError(err.message || "An error occurred during login")
+        } catch (err) {
+            console.log(err)
         } finally {
             setIsLoading(false)
         }

@@ -27,14 +27,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     useEffect(() => {
         const token = localStorage.getItem("token")
+        console.log(token)
 
         if (!token)
         {
             router.push("/")
-            return; //Чтобы не ругалось, что токена может не быть
         }
 
         try {
+            if (!token) return; //чтобы не ругалось
+
             const payload = JSON.parse(atob(token.split(".")[1]))
 
             if (payload.exp && payload.exp * 1000 < Date.now()) {
@@ -71,6 +73,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     const logout = () => {
         localStorage.removeItem("token")
+        document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
         setIsAuthenticated(false)
         setUsername(null)
         router.push("/login")
