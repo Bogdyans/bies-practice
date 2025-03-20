@@ -2,7 +2,7 @@ export async function GET(request:any) {
     const path = new URL(request.url).pathname;
   
     return new Response(JSON.stringify({
-      message: "Всё OK!",
+      message: "Это пока находи",
       path: path, 
       status: "success"
     }), {
