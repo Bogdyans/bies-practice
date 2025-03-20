@@ -3,12 +3,18 @@ import { NextResponse } from 'next/server';
 import { fetchNews } from '@/app/api/controllers/news/getNews';
 
 export async function POST(request: Request) {
-  try { //ффф
+  try {
     const userIdJson = await request.json();
-    const result = await fetchNews(userIdJson.token); 
+
+    // Проверяем, что token присутствует в теле запроса
+    if (!userIdJson.token) {
+      return NextResponse.json({ error: 'token is required', message: 'undefined' }, { status: 400 });
+    }
+
+    const result = await fetchNews(userIdJson.token);
 
     if ('error' in result) {
-      return NextResponse.json({ error: result.error, message: `${userIdJson.id}` }, { status: 404 });
+      return NextResponse.json({ error: result.error, message: `${userIdJson.token}` }, { status: 404 });
     }
 
     return NextResponse.json({ news: result.news }, { status: 200 });
