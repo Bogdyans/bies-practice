@@ -14,7 +14,7 @@ export const BOTTOM_MENU_BUTTONS_DATA =
         },
         {
             href: "/phone-book",
-            title: "Справочник",
+            title: "Контакты",
             Icon: Phone
         },
         {
