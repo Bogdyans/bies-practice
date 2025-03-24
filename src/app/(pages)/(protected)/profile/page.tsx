@@ -64,17 +64,17 @@ export default function ProfilePage() {
                     </div>
 
                      {/*Space Badge*/}
-                    <div className="absolute bottom-24 right-4">
-                        <div className="relative w-36 h-36">
-                            <div className="absolute inset-0 bg-[#20499a] rounded-full"></div>
-                            <div className="absolute inset-0 border-8 border-[#f0801b] rounded-full flex items-center justify-center">
-                                <div className="text-white text-center">
-                                    <div className="text-sm font-bold">КОСМОС</div>
-                                    <div className="text-sm font-bold">НАШ</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    {/*<div className="absolute bottom-24 right-4">*/}
+                    {/*    <div className="relative w-36 h-36">*/}
+                    {/*        <div className="absolute inset-0 bg-[#20499a] rounded-full"></div>*/}
+                    {/*        <div className="absolute inset-0 border-8 border-[#f0801b] rounded-full flex items-center justify-center">*/}
+                    {/*            <div className="text-white text-center">*/}
+                    {/*                <div className="text-sm font-bold">КОСМОС</div>*/}
+                    {/*                <div className="text-sm font-bold">НАШ</div>*/}
+                    {/*            </div>*/}
+                    {/*        </div>*/}
+                    {/*    </div>*/}
+                    {/*</div>*/}
                 </div>
     )
 }
