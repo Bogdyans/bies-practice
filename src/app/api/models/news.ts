@@ -1,8 +1,8 @@
 // models/news.ts
 import { PoolClient } from 'pg';
-import { DataNews } from '@/app/api/controllers/news/Inew';
+import { IDataNews } from '@/app/api/controllers/news/Inew';
 
-export async function getNews(client: PoolClient, userId: string): Promise<DataNews[] | null> {
+export async function getNews(client: PoolClient, userId: string): Promise<IDataNews[] | null> {
   const query = `
     SELECT 
       n.id AS news_id,
@@ -19,7 +19,7 @@ export async function getNews(client: PoolClient, userId: string): Promise<DataN
   const result = await client.query(query, values);
 
   if (result.rows.length > 0) {
-    return result.rows as DataNews[]; // Возвращаем все строки
+    return result.rows as IDataNews[]; // Возвращаем все строки
   } else {
     return null; // Если новости не найдены
   }

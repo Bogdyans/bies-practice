@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import {fetchUserById} from '@/app/api/controllers/profile/GetUserById';
+import { fetchUserById } from '@/app/api/controllers/profile/GetUserById';
 /**
  * Обработчик POST-запросов
  * @param {Request} request - Объект запроса

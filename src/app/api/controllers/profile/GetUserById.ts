@@ -12,7 +12,7 @@ import { UserIdRequest, UserData } from '@/app/api/controllers/profile/IUserIdjs
 export async function fetchUserById(userIdRequest: UserIdRequest): Promise<{ user: UserData } | { error: string }> {
   const client = await pool.connect();
   try {
-    const userId = userIdRequest.id; 
+    const userId = userIdRequest.id;
     const user = await getUserById(client, userId);
     if (!user) {
       return { error: 'User not found' };

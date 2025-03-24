@@ -10,15 +10,15 @@ export const metadata = {
 }
 
 export default function RootLayout({
-                                       children,
-                                   }: Readonly<{
+    children,
+}: Readonly<{
     children: React.ReactNode
 }>) {
     return (
         <html lang="ru">
-        <body className={inter.className}>
-        <main className="min-h-screen max-w-md mx-auto bg-white">{children}</main>
-        </body>
+            <body className={inter.className}>
+                <main className="min-h-screen max-w-md mx-auto bg-white">{children}</main>
+            </body>
         </html>
     )
 }

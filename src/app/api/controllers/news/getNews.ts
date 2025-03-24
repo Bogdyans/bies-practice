@@ -1,9 +1,9 @@
 // controllers/news/getNews.ts
-import { DataNews } from '@/app/api/controllers/news/Inew';
+import { IDataNews } from '@/app/api/controllers/news/Inew';
 import { getNews } from '../../models/news';
 import pool from '@/app/api/controllers/connect_to_bd/conectToBd';
 
-export async function fetchNews(Token: string): Promise<{ news: DataNews[] } | { error: string }> {
+export async function fetchNews(Token: string): Promise<{ news: IDataNews[] } | { error: string }> {
   const client = await pool.connect();
   try {
     console.log('Fetching news for user ID:', Token); // Логируем ID пользователя
@@ -18,7 +18,7 @@ export async function fetchNews(Token: string): Promise<{ news: DataNews[] } | {
     }
   } catch (error) {
     console.error('Database query error:', error);
-    return { error: 'Internal Server Error'};
+    return { error: 'Internal Server Error' };
   } finally {
     client.release();
   }
