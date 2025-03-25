@@ -5,9 +5,9 @@ import { PoolClient } from 'pg';
  * Функция для получения пользователя по id
  * @param {PoolClient} client - Клиент базы данных
  * @param {number} userId - ID пользователя
- * @returns {Promise<any>} - Данные пользователя или null, если пользователь не найден
+ * @returns {Promise<any> | null} - Данные пользователя или null, если пользователь не найден
  */
-export async function getUserById(client: PoolClient, userId: number): Promise<any> {
+export async function getUserById(client: PoolClient, userId: number): Promise<any | null> {
   const query = 'SELECT * FROM users WHERE id = $1';
   const values = [userId];
   const result = await client.query(query, values);
