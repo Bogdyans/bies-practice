@@ -8,7 +8,7 @@ import {useState} from "react";
 export default function MenuServiceButton(
         { title, description, iconPath, href, showDesc }
         :
-        { title: string, description: string, iconPath: string, href: string, showDesc: (arg0: string) => void }
+        { title: string, description: string, iconPath: string, href?: string, showDesc: (arg0: string) => void }
 ) {
     const [isTouching, setIsTouching] = useState<boolean>(false);
 
@@ -25,7 +25,7 @@ export default function MenuServiceButton(
                        hover:shadow-md transition-shadow
                        ${isTouching ? "shadow-md" : ""}
                       `}
-            href={href}
+            href={href ? href : "/"}
             onTouchStart={() => setIsTouching(true)}
             onTouchEnd={() => setIsTouching(false)}
             onTouchCancel={() => setIsTouching(false)}
