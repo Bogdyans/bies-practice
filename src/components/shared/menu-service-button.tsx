@@ -31,6 +31,7 @@ export default function MenuServiceButton(
             onTouchEnd={() => setIsTouching(false)}
             onTouchCancel={() => setIsTouching(false)}
             onClick={(e) => {if (!href) e.preventDefault()}}
+            prefetch={false}
         >
             <div className="font-medium">{title}</div>
 
