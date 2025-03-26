@@ -23,12 +23,14 @@ export default function MenuServiceButton(
         <Link
             className={`bg-[#f5f5f5] rounded-lg p-4 relative h-24 w-full text-left
                        hover:shadow-md transition-shadow
+                       ${!href ? 'cursor-default' : ''} 
                        ${isTouching ? "shadow-md" : ""}
                       `}
             href={href ? href : "/"}
             onTouchStart={() => setIsTouching(true)}
             onTouchEnd={() => setIsTouching(false)}
             onTouchCancel={() => setIsTouching(false)}
+            onClick={(e) => {if (!href) e.preventDefault()}}
         >
             <div className="font-medium">{title}</div>
 
