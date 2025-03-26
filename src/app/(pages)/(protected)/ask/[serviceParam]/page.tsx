@@ -8,6 +8,7 @@ import {Briefcase, Mail, User} from "lucide-react";
 import DefaultButton from "@/components/shared/buttons/button";
 import MenuServiceButton from "@/components/shared/menu-service-button";
 import InfoWindow from "@/components/shared/info-window";
+import NotFound from "@/components/shared/not-found";
 
 export default function AskPage() {
     const { serviceParam } = useParams()
@@ -20,15 +21,14 @@ export default function AskPage() {
 
     //Проверяем есть ли такой сервис, как я додумался до этого
     const service = SERVICE_DATA.find((el) => el.href.slice(-1 * (serviceParam.length)) === serviceParam)
-    console.log("service", service)
 
     if (!service) {
-        return null;
+        return <NotFound />
     }
 
     const handleSend = () => {
         if (!questionValue || questionValue.trim().length <= 0) {
-            return;
+            return <NotFound />
         }
     }
 
