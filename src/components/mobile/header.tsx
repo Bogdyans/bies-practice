@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from "react"
 import Image from "next/image"
 import { X } from "lucide-react"
 import XButton from "@/components/shared/buttons/x-button";
+import { SearchIcon, BellIcon, MainLogoIcon } from "@/components/ui/icons";
 
 export default function Header() {
     const [isSearchOpen, setIsSearchOpen] = useState(false)
@@ -43,7 +44,8 @@ export default function Header() {
                 className={`z-10 cursor-pointer transition-all duration-500 ease-in-out`}
                 onClick={toggleSearch}
             >
-                <Image src="/media/icons/search.png" alt="search" width={33} height={33} />
+                {/* <Image src="/media/icons/search.png" alt="search" width={33} height={33} />  */}
+                <SearchIcon width={33} height={33} />
             </div>
 
             {/* Logo */}
@@ -57,7 +59,8 @@ export default function Header() {
                 }`}
             >
                 <div className="relative w-32 h-12">
-                    <Image src="/media/logo.png" alt="logo" width={151} height={58} />
+                    {/* <Image src="/media/logo.png" alt="logo" width={151} height={58} /> */}
+                    <MainLogoIcon width={151} height={58} />
                 </div>
             </div>
 
@@ -69,7 +72,8 @@ export default function Header() {
                         : "opacity-100 transform translate-x-0"
                 }`}
             >
-                <Image src="/media/icons/notifications.png" alt="notifications" width={33} height={33} />
+                {/* <Image src="/media/icons/notifications.png" alt="notifications" width={33} height={33} /> */}
+                <BellIcon width={33} height={33} />
             </div>
 
             {/* Search Input */}
