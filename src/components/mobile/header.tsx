@@ -37,7 +37,7 @@ export default function Header() {
     }
 
     return (
-        <header className="relative flex justify-between items-center px-4 py-3 border-b border-[#f5f5f5] overflow-hidden">
+        <header className="w-[430px] h-[96px] relative flex justify-between items-center px-4 py-3 border-b border-[#f5f5f5] overflow-hidden">
 
             {/* Search Icon */}
             <div
@@ -45,7 +45,7 @@ export default function Header() {
                 onClick={toggleSearch}
             >
                 {/* <Image src="/media/icons/search.png" alt="search" width={33} height={33} />  */}
-                <SearchIcon width={33} height={33} />
+                <SearchIcon width={22} height={22} />
             </div>
 
             {/* Logo */}
@@ -73,7 +73,7 @@ export default function Header() {
                 }`}
             >
                 {/* <Image src="/media/icons/notifications.png" alt="notifications" width={33} height={33} /> */}
-                <BellIcon width={33} height={33} />
+                <BellIcon width={22} height={24.75} />
             </div>
 
             {/* Search Input */}
