@@ -1,4 +1,4 @@
-import {FileTextIcon, HomeIcon, Phone, User} from "lucide-react";
+import { HomeIcon, DocumentIcon, TelephoneIcon, ProfileIcon } from "../components/ui/icons";
 
 export const BOTTOM_MENU_BUTTONS_DATA =
     [
@@ -10,16 +10,16 @@ export const BOTTOM_MENU_BUTTONS_DATA =
         {
             href: "/documents",
             title: "Документы",
-            Icon: FileTextIcon
+            Icon: DocumentIcon
         },
         {
             href: "/phone-book",
             title: "Контакты",
-            Icon: Phone
+            Icon: TelephoneIcon
         },
         {
             href: "/profile",
             title: "Профиль",
-            Icon: User
+            Icon: ProfileIcon
         },
     ]
