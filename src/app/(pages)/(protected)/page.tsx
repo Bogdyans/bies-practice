@@ -2,14 +2,12 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import BottomMenu from "@/components/mobile/bottom-menu";
 
-import {MENU_SERVICE_BUTTON_DATA} from "@/constants/menu-service-button-data";
+import {SERVICE_DATA} from "@/constants/service-data";
 import MenuServiceButton from "@/components/shared/menu-service-button";
 
 import {NEWS_TITLE_DATA} from "@/constants/mock/news-title-data";
 import NewsTitle from "@/components/shared/menu-news-title";
-import Header from "@/components/mobile/header";
 import DefaultButton from "@/components/shared/buttons/button";
 import InfoWindow from "@/components/shared/info-window";
 
@@ -28,7 +26,7 @@ export default function PromtehApp() {
     return (
         <>
             <div className="grid grid-cols-2 gap-4 p-4">
-                {MENU_SERVICE_BUTTON_DATA.map((data) => (
+                {SERVICE_DATA.map((data) => (
                     <MenuServiceButton
                         key={data.title}
                         title={data.title}

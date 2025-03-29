@@ -2,7 +2,6 @@
 
 import { useState, useRef, useEffect } from "react"
 import Image from "next/image"
-import { X } from "lucide-react"
 import XButton from "@/components/shared/buttons/x-button";
 import { SearchIcon, BellIcon, MainLogoIcon } from "@/components/ui/icons";
 

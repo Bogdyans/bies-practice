@@ -8,7 +8,7 @@ import {useState} from "react";
 export default function MenuServiceButton(
         { title, description, iconPath, href, showDesc }
         :
-        { title: string, description: string, iconPath: string, href: string, showDesc: (arg0: string) => void }
+        { title: string, description: string, iconPath: string, href?: string, showDesc: (arg0: string) => void }
 ) {
     const [isTouching, setIsTouching] = useState<boolean>(false);
 
@@ -23,12 +23,15 @@ export default function MenuServiceButton(
         <Link
             className={`bg-[#f5f5f5] rounded-lg p-4 relative h-24 w-full text-left
                        hover:shadow-md transition-shadow
+                       ${!href ? 'cursor-default' : ''} 
                        ${isTouching ? "shadow-md" : ""}
                       `}
-            href={href}
+            href={href ? href : "/"}
             onTouchStart={() => setIsTouching(true)}
             onTouchEnd={() => setIsTouching(false)}
             onTouchCancel={() => setIsTouching(false)}
+            onClick={(e) => {if (!href) e.preventDefault()}}
+            prefetch={false}
         >
             <div className="font-medium">{title}</div>
 
