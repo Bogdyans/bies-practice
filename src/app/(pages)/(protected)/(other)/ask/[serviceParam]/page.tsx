@@ -4,11 +4,11 @@ import {useParams} from "next/navigation";
 import HeaderWithBackButton from "@/components/mobile/header-with-back-button";
 import {SERVICE_DATA} from "@/constants/service-data";
 import React, {useState} from "react";
-import {Briefcase, Mail, User} from "lucide-react";
 import DefaultButton from "@/components/shared/buttons/button";
 import MenuServiceButton from "@/components/shared/menu-service-button";
 import InfoWindow from "@/components/shared/info-window";
 import NotFound from "@/components/shared/not-found";
+import {FileIcon, MailIcon, UserIcon} from "@/components/ui/icons";
 
 export default function AskPage() {
     const { serviceParam } = useParams()
@@ -58,15 +58,15 @@ export default function AskPage() {
                         <div className="flex justify-between">
                             <div className="space-y-3">
                                 <div className="flex items-center">
-                                    <User className="w-5 h-5 text-[#e30613] mr-2"/>
+                                    <UserIcon className="w-5 h-5 text-[#e30613] mr-2" />
                                     <span className="text-base">Фамилия Имя Отчество</span>
                                 </div>
                                 <div className="flex items-center">
-                                    <Briefcase className="w-5 h-5 text-[#e30613] mr-2"/>
+                                    <FileIcon className="w-5 h-5 text-[#e30613] mr-2" />
                                     <span className="text-base">Должность</span>
                                 </div>
                                 <div className="flex items-center">
-                                    <Mail className="w-5 h-5 text-[#e30613] mr-2"/>
+                                    <MailIcon className="w-5 h-5 text-[#e30613] mr-2" />
                                     <span className="text-base">Почта</span>
                                 </div>
                             </div>
