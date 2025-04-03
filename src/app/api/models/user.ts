@@ -1,5 +1,5 @@
 // src/app/api/models/m_user.ts
-import { PoolClient } from "pg";
+import { PoolClient, QueryResult, QueryResultRow } from "pg";
 
 /**
  * Функция для получения пользователя по id
@@ -10,29 +10,19 @@ import { PoolClient } from "pg";
 export async function getUserById(
   client: PoolClient,
   userId: number
-): Promise<any | null> {
-  const query = "SELECT * FROM users WHERE id = $1";
-  const values = [userId];
-  const result = await client.query(query, values);
+): Promise<QueryResultRow | null> {
+  const query : string = "SELECT * FROM users WHERE id = $1";
+  const result : QueryResult<QueryResultRow> = await client.query(query, [userId]);
 
-  // Если пользователь найден, возвращаем его данные
-  if (result.rows.length > 0) {
-    return result.rows[0];
-  } else {
-    return null; // Если пользователь не найден
-  }
+  return result.rows[0] ?? null;
 }
 
 export async function getUserInfoByUsername(
   client: PoolClient,
   username: string
-): Promise<any | null> {
-  const query = "SELECT * FROM users WHERE username = $1";
-  const result = await client.query(query, [username]);
+): Promise<QueryResultRow | null> {
+  const query : string = "SELECT * FROM users WHERE username = $1";
+  const result : QueryResult<QueryResultRow> = await client.query(query, [username]);
 
-  if (result.rows.length > 0) {
-    return result.rows[0];
-  } else {
-    return null;
-  }
+  return result.rows[0] ?? null;
 }

@@ -2,15 +2,19 @@ import { NextRequest, NextResponse } from "next/server";
 import { SignJWT } from "jose";
 import bcrypt from "bcryptjs";
 import { getUserInfoByUsername } from "@/app/api/models/user";
-import pool from "../../connect_to_bd/conectToBd";
+import pool from "@/app/api/controllers/connect_to_bd/conectToBd";
 
-//TODO: Затем в env закинуть
+interface ILoginData {
+  username: string;
+  password: string;
+}
+
 const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET);
 
-export async function GET(request: NextRequest): Promise<NextResponse> {
+export async function POST(request: NextRequest): Promise<NextResponse> {
   const client = await pool.connect();
   try {
-    const { username, password } = await request.json();
+    const { username, password }: ILoginData = await request.json();
 
     if (!username || !password) {
       return NextResponse.json(
@@ -22,42 +26,25 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     // Запрос к базе данных для получения пользователя
     const user = await getUserInfoByUsername(client, username);
 
-    // const res = await pool.query("SELECT * FROM users WHERE username = $1", [
-    //   username,
-    // ]);
-    // const user = res.rows[0];
-
-    if (!user) {
+    if (!user || !(await bcrypt.compare(password, user.password))) {
       return NextResponse.json(
         { message: "Invalid username or password" },
         { status: 401 }
       );
     }
 
-    // Проверяем пароль
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-
-    if (!isPasswordValid) {
-      return NextResponse.json(
-        { message: "Invalid username or password" },
-        { status: 401 }
-      );
-    }
-
-    // Создаем JWT token
     const token = await new SignJWT({
       username: user.username,
-      // Add any additional claims you need
     })
       .setProtectedHeader({ alg: "HS256" })
       .setIssuedAt()
-      .setExpirationTime("24h") // Token expires in 24 hours
+      .setExpirationTime("24h")
       .sign(JWT_SECRET);
 
     const response = NextResponse.json({ token });
     response.cookies.set("token", token, {
       httpOnly: true,
-      maxAge: 24 * 60 * 60, // 24 часа
+      maxAge: 24 * 60 * 60,
     });
 
     return response;
@@ -67,5 +54,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       { message: "Internal server error" },
       { status: 500 }
     );
+  } finally {
+    client.release();
   }
 }
