@@ -13,7 +13,7 @@ export async function fetchUserById(userIdRequest: UserIdRequest): Promise<{ use
   const client = await pool.connect();
   try {
     const userId = userIdRequest.id;
-    const user = await getUserById(client, userId);
+    const user = await getUserById(client, userId) as  UserData;
     if (!user) {
       return { error: 'User not found' };
     }

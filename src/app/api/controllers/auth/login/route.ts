@@ -18,7 +18,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     if (!username || !password) {
       return NextResponse.json(
-        { message: "Username and password are required" },
+        { message: "Username and password are required"},
         { status: 400 }
       );
     }
@@ -28,13 +28,13 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     if (!user || !(await bcrypt.compare(password, user.password))) {
       return NextResponse.json(
-        { message: "Invalid username or password" },
+        { message: "Invalid username or password2" },
         { status: 401 }
       );
     }
 
     const token = await new SignJWT({
-      username: user.username,
+      username: user.login,
     })
       .setProtectedHeader({ alg: "HS256" })
       .setIssuedAt()
