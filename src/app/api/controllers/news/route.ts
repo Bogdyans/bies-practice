@@ -1,25 +1,35 @@
-// app/api/controllers/news/route.ts
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
+import { verifyToken } from '@/app/api/utils/jwt';
 import { fetchNews } from '@/app/api/controllers/news/getNews';
 
-export async function POST(request: Request) {
+export async function GET(request: NextRequest) {
   try {
-    const userIdJson = await request.json();
+    // 1. Проверяем токен
+    const authHeader = request.headers.get('Authorization');
+    if (!authHeader?.startsWith('Bearer ')) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+    const token = authHeader.split(' ')[1];
 
-    // Проверяем, что token присутствует в теле запроса
-    if (!userIdJson.token) {
-      return NextResponse.json({ error: 'token is required', message: 'undefined' }, { status: 400 });
+    // 2. Верифицируем токен
+    const decoded = await verifyToken(token);
+    if (!decoded) {
+      return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
     }
 
-    const result = await fetchNews(userIdJson.token);
-
+    // 3. Получаем новости
+    const result = await fetchNews(decoded.id);
     if ('error' in result) {
-      return NextResponse.json({ error: result.error, message: `${userIdJson.token}` }, { status: 404 });
+      return NextResponse.json({ error: result.error }, { status: 404 });
     }
 
     return NextResponse.json({ news: result.news }, { status: 200 });
+
   } catch (error) {
-    console.error('Error in POST request:', error);
-    return NextResponse.json({ error: 'Server Error'}, { status: 500 });
+    console.error('News fetch error:', error);
+    return NextResponse.json(
+      { error: 'Internal Server Error' },
+      { status: 500 }
+    );
   }
 }

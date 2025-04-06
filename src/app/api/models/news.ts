@@ -2,7 +2,7 @@
 import { PoolClient } from 'pg';
 import { IDataNews } from '@/app/api/controllers/news/Inew';
 
-export async function getNews(client: PoolClient, userId: string): Promise<IDataNews[] | null> {
+export async function getNews(client: PoolClient, userId: number): Promise<IDataNews[] | null> {
   const query = `
     SELECT 
       n.id AS news_id,
