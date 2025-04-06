@@ -1,25 +1,39 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { NotificationModel } from '../../models/notifications';
+import { verifyToken } from '@/app/api/utils/jwt';
+import pool from '@/app/api/controllers/connect_to_bd/conectToBd';
 
-// GET /api/notifications - Получить уведомления
 export async function GET(request: NextRequest) {
+  const client = await pool.connect();
   try {
-    const searchParams = request.nextUrl.searchParams;
-    const userId = searchParams.get('user_id');
-    
-    if (!userId) {
+    // 1. Проверка токена
+    const authHeader = request.headers.get('Authorization');
+    if (!authHeader?.startsWith('Bearer ')) {
       return NextResponse.json(
-        { success: false, error: 'Parameter user_id is required' },
-        { status: 400 }
+        { success: false, error: 'Missing authorization token' },
+        { status: 401 }
       );
     }
 
-    const limit = parseInt(searchParams.get('limit') || '20');
-    const offset = parseInt(searchParams.get('offset') || '0');
+    const token = authHeader.split(' ')[1];
+    const decoded = await verifyToken(token);
+    
+    if (!decoded?.id) {
+      return NextResponse.json(
+        { success: false, error: 'Invalid token' },
+        { status: 401 }
+      );
+    }
+
+    // 2. Получение параметров запроса
+    const searchParams = request.nextUrl.searchParams;
+    const limit = Math.min(Number(searchParams.get('limit') || 20),100);
+    const offset = Number(searchParams.get('offset') || 0);
     const unreadOnly = searchParams.get('unread_only') === 'true';
 
+    // 3. Получение уведомлений
     const notifications = await NotificationModel.getByUserId(
-      parseInt(userId),
+      decoded.id, // Только user_id, без передачи client
       limit,
       offset,
       unreadOnly
@@ -31,42 +45,12 @@ export async function GET(request: NextRequest) {
     });
 
   } catch (error) {
+    console.error('Notification fetch error:', error);
     return NextResponse.json(
-      { 
-        success: false, 
-      },
+      { success: false, error: 'Internal server error' },
       { status: 500 }
     );
-  }
-}
-
-// POST /api/notifications - Создать уведомление
-export async function POST(request: NextRequest) {
-  try {
-    const { user_id, title, date } = await request.json();
-
-    if (!user_id || !title) {
-      return NextResponse.json(
-        { success: false, error: 'Required fields: user_id, title' },
-        { status: 400 }
-      );
-    }
-
-    const notification = await NotificationModel.create(
-      user_id,
-      title,
-      date ? new Date(date) : undefined
-    );
-
-    return NextResponse.json(
-      { success: true, data: notification },
-      { status: 201 }
-    );
-
-  } catch (error) {
-    return NextResponse.json(
-      { success: false, },
-      { status: 500 }
-    );
+  } finally {
+    client.release();
   }
 }
