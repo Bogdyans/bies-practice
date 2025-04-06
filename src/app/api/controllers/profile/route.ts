@@ -1,14 +1,25 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
+import { verifyToken } from '@/app/api/utils/jwt';
 import { fetchUserById } from '@/app/api/controllers/profile/GetUserById';
-/**
- * Обработчик POST-запросов
- * @param {Request} request - Объект запроса
- * @returns {Promise<NextResponse>} - Ответ сервера
- */
-export async function POST(request: Request) {
+
+export async function GET(request: NextRequest) {
   try {
-    const userIdJson = await request.json();
-    const result = await fetchUserById(userIdJson);
+    // 1. Получаем токен из куки или заголовка
+    const token = request.cookies.get('token')?.value || 
+                 request.headers.get('Authorization')?.split(' ')[1];
+
+    if (!token) {
+      return NextResponse.json({ error: 'Token is missing' }, { status: 401 });
+    }
+
+    // 2. Проверяем токен
+    const decoded = await verifyToken(token);
+    if (!decoded || !('id' in decoded)) {
+      return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
+    }
+
+    // 3. Получаем данные пользователя
+    const result = await fetchUserById({ id: decoded.id });
 
     if ('error' in result) {
       return NextResponse.json({ error: result.error }, { status: 404 });
@@ -16,7 +27,8 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ user: result.user }, { status: 200 });
   } catch (error) {
-    console.error('Error in POST request:', error);
+    console.error('Error in GET request:', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }
+

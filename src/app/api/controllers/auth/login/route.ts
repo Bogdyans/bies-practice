@@ -35,6 +35,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     const token = await new SignJWT({
       username: user.login,
+      id: user.id,    
     })
       .setProtectedHeader({ alg: "HS256" })
       .setIssuedAt()
@@ -49,7 +50,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     return response;
   } catch (error) {
-    console.error("Login error:", error);
+    //console.error("Login error:", error);
     return NextResponse.json(
       { message: "Internal server error" },
       { status: 500 }

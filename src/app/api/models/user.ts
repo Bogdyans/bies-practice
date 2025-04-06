@@ -13,7 +13,6 @@ export async function getUserById(
 ): Promise<QueryResultRow | null> {
   const query : string = "SELECT * FROM users WHERE id = $1";
   const result : QueryResult<QueryResultRow> = await client.query(query, [userId]);
-  console.log(result)
   return result.rows[0] ?? null;
 }
 
@@ -23,6 +22,5 @@ export async function getUserInfoByUsername(
 ): Promise<QueryResultRow | null> {
   const query : string = "SELECT * FROM users WHERE login = $1";
   const result : QueryResult<QueryResultRow> = await client.query(query, [username]);
-  console.log(result)
   return result.rows[0] ?? null;
 }
