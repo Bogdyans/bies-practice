@@ -24,7 +24,7 @@ export default function HeaderDesktop() {
                             <Link href="/documents" className="font-medium hover:text-[#e30613] transition-colors">
                                 Документы
                             </Link>
-                            <Link href="/directory" className="font-medium hover:text-[#e30613] transition-colors">
+                            <Link href="/phone-book" className="font-medium hover:text-[#e30613] transition-colors">
                                 Справочник
                             </Link>
                             <Link href="/profile" className="font-medium hover:text-[#e30613] transition-colors">
