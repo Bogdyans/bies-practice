@@ -1,10 +1,14 @@
 "use client"
 
 import Link from "next/link"
-import {Search, Bell, Menu} from "lucide-react"
-import {MainLogoIcon} from "@/components/ui/icons";
+import {BellIcon, MainLogoIcon, SearchIcon} from "@/components/ui/icons";
+import {HEADER_BUTTONS_DATA} from "@/constants/header-buttons";
+import {usePathname} from "next/navigation";
 
 export default function HeaderDesktop() {
+    const path = usePathname();
+    console.log(path)
+
     return (
         <header className="border-b border-[#f5f5f5] bg-white">
             <div className="container mx-auto px-4 py-4 max-w-7xl">
@@ -18,30 +22,22 @@ export default function HeaderDesktop() {
 
                         {/* Main Navigation */}
                         <nav className="hidden md:flex space-x-6">
-                            <Link href="/" className="font-medium hover:text-[#e30613] transition-colors">
-                            Главная
-                            </Link>
-                            <Link href="/documents" className="font-medium hover:text-[#e30613] transition-colors">
-                                Документы
-                            </Link>
-                            <Link href="/phone-book" className="font-medium hover:text-[#e30613] transition-colors">
-                                Справочник
-                            </Link>
-                            <Link href="/profile" className="font-medium hover:text-[#e30613] transition-colors">
-                                Профиль
-                            </Link>
+                            {
+                                HEADER_BUTTONS_DATA.map((button, index) =>
+                                    <Link href={button.href} key={index} className={`font-medium ${path === button.href? "text-[#e30613]" : ""} hover:text-[#e30613] transition-colors`}>
+                                        {button.title}
+                                    </Link>
+                                )
+                            }
                         </nav>
                     </div>
 
                     <div className="flex items-center space-x-4">
                         <button className="p-2 hover:bg-[#f5f5f5] rounded-full transition-colors">
-                            <Search className="w-5 h-5"/>
+                            <SearchIcon width="20px" height="20px"/>
                         </button>
                         <button className="p-2 hover:bg-[#f5f5f5] rounded-full transition-colors">
-                            <Bell className="w-5 h-5"/>
-                        </button>
-                        <button className="p-2 hover:bg-[#f5f5f5] rounded-full transition-colors md:hidden">
-                            <Menu className="w-5 h-5"/>
+                            <BellIcon width="20px" height="20px"/>
                         </button>
                     </div>
                 </div>
