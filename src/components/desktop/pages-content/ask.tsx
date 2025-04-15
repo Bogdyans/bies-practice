@@ -53,7 +53,7 @@ export default function DesktopAskPage({ service, showTooltip, setQuestionValue,
                             <h2 className="text-xl font-bold mb-4">Обратная связь:</h2>
                             <div className="space-y-4">
                                 <textarea
-                                    className="w-full h-40 bg-white border border-[#a4a4a4] rounded-md px-4 py-3 text-black placeholder-[#a4a4a4]"
+                                    className="w-full h-40 bg-white border border-[#a4a4a4] rounded-md px-4 py-3 text-black placeholder-[#a4a4a4] resize-none"
                                     placeholder="Текст вопроса, проблемы..."
                                     onChange={(e) => setQuestionValue(e.target.value)}
                                 ></textarea>
@@ -69,11 +69,13 @@ export default function DesktopAskPage({ service, showTooltip, setQuestionValue,
                     </div>
 
                     {/* Right column - Responsible person section */}
-                    <div className="bg-gray-50 p-6 rounded-lg w-1/4">
+                    <div className="bg-gray-50 p-6 rounded-lg w-full lg:w-1/4">
                         <h2 className="text-xl font-bold mb-4">Ответственное лицо:</h2>
                         <div className="flex flex-col items-center mb-6">
                             <div className="w-40 h-48 bg-gray-200 rounded-md overflow-hidden mb-4">
                                 <Image
+                                    width={160}
+                                    height={192}
                                     src="/placeholder.svg?height=128&width=112"
                                     alt="Фото ответственного лица"
                                     className="w-full h-full object-cover"

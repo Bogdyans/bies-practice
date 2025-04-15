@@ -45,6 +45,8 @@ export default function MobileAskPage({ service, showTooltip, setQuestionValue, 
                         </div>
                         <div className="w-28 h-32 bg-gray-200 rounded-md overflow-hidden">
                             <Image
+                                width={160}
+                                height={192}
                                 src="/placeholder.svg?height=128&width=112"
                                 alt="Фото ответственного лица"
                                 className="w-full h-full object-cover"
@@ -86,11 +88,11 @@ export default function MobileAskPage({ service, showTooltip, setQuestionValue, 
                 <div>
                     <h2 className="text-xl font-bold mb-3">Обратная связь:</h2>
                     <div className="space-y-4">
-            <textarea
-                className="w-full h-32 bg-white border border-[#a4a4a4] rounded-md px-4 py-3 text-black placeholder-[#a4a4a4]"
-                placeholder="Текст вопроса, проблемы..."
-                onChange={(e) => setQuestionValue(e.target.value)}
-            ></textarea>
+                        <textarea
+                            className="w-full h-32 bg-white border border-[#a4a4a4] rounded-md px-4 py-3 text-black placeholder-[#a4a4a4] resize-none"
+                            placeholder="Текст вопроса, проблемы..."
+                            onChange={(e) => setQuestionValue(e.target.value)}
+                        ></textarea>
                         <DefaultButton
                             content="Задать вопрос"
                             bg="#e30613"
