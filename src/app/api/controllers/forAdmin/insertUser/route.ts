@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createUser, NewUserData } from "@/app/api/models/role/admin/addNewUser";
 import db from "@/app/api/controllers/connect_to_bd/conectToBd";
-import { verifyToken } from "@/app/api/utils/jwt"; // Функция для верификации токена
+import { verifyToken } from "@/app/api/utils/jwt";  // Функция для верификации токена
 
 // Экспортируем обработчик для метода POST как именованный экспорт
 export async function POST(req: NextRequest) {
@@ -27,12 +27,13 @@ export async function POST(req: NextRequest) {
     }
 
     const userId = decoded.id;
+    console.log("Пользователь с ID:", userId);  // Логирование ID пользователя
 
     // Шаг 4: Проверка роли пользователя (должен быть администратор)
     const client = await db.connect();
     try {
       const userRoleResult = await client.query(
-        'SELECT role_id FROM users WHERE id = $1',
+        'SELECT role_id FROM "User" WHERE id = $1',  // Исправлено на "User"
         [userId]
       );
 
@@ -42,9 +43,8 @@ export async function POST(req: NextRequest) {
       }
 
       const roleId = userRoleResult.rows[0].role_id;
-
       // Проверка на роль администратора (например, роль администратора = 1)
-      if (roleId !== 1) {
+      if (roleId != 1) {
         return NextResponse.json({ message: 'Только администратор может создавать пользователей' }, { status: 403 });
       }
 
@@ -58,7 +58,7 @@ export async function POST(req: NextRequest) {
         const newUserId = await createUser(client, userData);
 
         await client.query("COMMIT");
-        return NextResponse.json({ message: "Пользователь создан", userId: newUserId, Token:token }, { status: 201 });
+        return NextResponse.json({ message: "Пользователь создан", userId: newUserId }, { status: 201 });
       } catch (err) {
         await client.query("ROLLBACK");
         console.error("Ошибка при создании пользователя:", err);
