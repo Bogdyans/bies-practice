@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ message: "Токен отсутствует. Доступ запрещен." }, { status: 401 });
   }
 
-  console.log("Полученный токен:", token);  // Логирование токена
+  //console.log("Полученный токен:", token);  // Логирование токена
 
   try {
     // Шаг 3: Верификация токена
@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
     }
 
     const userId = decoded.id;
-    console.log("Пользователь с ID:", userId);  // Логирование ID пользователя
+    //console.log("Пользователь с ID:", userId);  // Логирование ID пользователя
 
     // Шаг 4: Проверка роли пользователя (должен быть администратор)
     const client = await db.connect();

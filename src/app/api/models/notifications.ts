@@ -55,4 +55,84 @@ export const NotificationModel = {
       throw error;
     }
   },
+
+  async create(notification: Omit<Notification, 'id' | 'created_at' | 'is_read' | 'read_at'>): Promise<Notification> {
+    try {
+      const query = `
+        INSERT INTO "notification" (
+          user_id, title, message, notification_type,
+          related_entity_type, related_entity_id
+        )
+        VALUES ($1, $2, $3, $4, $5, $6)
+        RETURNING *
+      `;
+
+      const params = [
+        notification.user_id,
+        notification.title,
+        notification.message,
+        notification.notification_type,
+        notification.related_entity_type || null,
+        notification.related_entity_id || null
+      ];
+
+      const result = await db.query(query, params);
+      return {
+        ...result.rows[0],
+        created_at: new Date(result.rows[0].created_at),
+        read_at: result.rows[0].read_at ? new Date(result.rows[0].read_at) : null,
+      };
+    } catch (error) {
+      console.error('Database error in create:', error);
+      throw error;
+    }
+  },
+
+  async updateReadStatus(id: number, is_read: boolean): Promise<Notification | null> {
+    try {
+      const query = `
+        UPDATE "notification"
+        SET 
+          is_read = $1,
+          read_at = CASE WHEN $1 = TRUE AND read_at IS NULL THEN CURRENT_TIMESTAMP ELSE read_at END
+        WHERE id = $2
+        RETURNING *
+      `;
+      
+      const result = await db.query(query, [is_read, id]);
+      
+      if (result.rowCount === 0) {
+        return null;
+      }
+
+      return {
+        ...result.rows[0],
+        created_at: new Date(result.rows[0].created_at),
+        read_at: result.rows[0].read_at ? new Date(result.rows[0].read_at) : null,
+      };
+    } catch (error) {
+      console.error('Database error in updateReadStatus:', error);
+      throw error;
+    }
+  },
+
+  async delete(id: number): Promise<Notification | null> {
+    try {
+      const query = 'DELETE FROM "notification" WHERE id = $1 RETURNING *';
+      const result = await db.query(query, [id]);
+
+      if (result.rowCount === 0) {
+        return null;
+      }
+
+      return {
+        ...result.rows[0],
+        created_at: new Date(result.rows[0].created_at),
+        read_at: result.rows[0].read_at ? new Date(result.rows[0].read_at) : null,
+      };
+    } catch (error) {
+      console.error('Database error in delete:', error);
+      throw error;
+    }
+  }
 };

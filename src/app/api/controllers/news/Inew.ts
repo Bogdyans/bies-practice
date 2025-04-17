@@ -1,7 +1,8 @@
-// controllers/news/Inew.ts
 export interface IDataNews {
-  news_id: number;
+  id: number;
   title: string;
   text: string;
-  date: string;
+  publish_date: string;
+  organization_id: number;
+  is_published: boolean;
 }
