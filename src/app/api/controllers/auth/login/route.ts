@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { SignJWT } from "jose";
 import bcrypt from "bcryptjs";
-import { getUserInfoByUsername } from "@/app/api/models/user";
+import { getUserInfoByUsername, User } from "@/app/api/models/user";
 import pool from "@/app/api/controllers/connect_to_bd/conectToBd";
 
 interface ILoginData {
@@ -18,15 +18,22 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     if (!username || !password) {
       return NextResponse.json(
-        { message: "Username and password are required"},
+        { message: "Username and password are required" },
         { status: 400 }
       );
     }
 
     // Запрос к базе данных для получения пользователя
-    const user = await getUserInfoByUsername(client, username);
+    const user: User | null = await getUserInfoByUsername(client, username);
 
-    if (!user || !(await bcrypt.compare(password, user.password))) {
+    // if (!user || !(await bcrypt.compare(password, user.password))) {
+    //   return NextResponse.json(
+    //     { message: "Invalid username or password2" },
+    //     { status: 401 }
+    //   );
+    // }
+
+    if (!user || password != user.password) {
       return NextResponse.json(
         { message: "Invalid username or password2" },
         { status: 401 }
@@ -35,7 +42,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     const token = await new SignJWT({
       username: user.login,
-      id: user.id,    
+      id: user.id,
     })
       .setProtectedHeader({ alg: "HS256" })
       .setIssuedAt()
