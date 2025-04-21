@@ -1,4 +1,14 @@
-export const SERVICE_DATA = [
+export interface ServiceType {
+    title: string;
+    description: string;
+    smallDescription?: string;
+    iconPath: string;
+    href: string;
+    about?: string;
+    children?: ServiceType[];
+}
+
+export const SERVICE_DATA: ServiceType[] = [
     {
         title: "HR-Сервисы",
         description: "HR-сервисы предоставляют информацию о вакансиях, карьерном росте и кадровых процедурах компании.",
