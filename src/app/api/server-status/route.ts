@@ -4,7 +4,7 @@ import StatusController from "@/controllers/status";
 
 export async function GET() {
     try {
-        const result = StatusController.getDBStatus()
+        const result = await StatusController.getDBStatus()
 
         return NextResponse.json({ status: 'success', version: result });
     } catch {

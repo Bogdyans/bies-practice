@@ -18,13 +18,13 @@ export default class UserModel {
 
   static async findByUsername(client: PoolClient, username: string) {
     const query = `
-    SELECT 
-      u.id,
-      u.login,
-      u.password_hash  
-    FROM "User" u
-    WHERE u.login = $1
-  `;
+                      SELECT 
+                        u.id,
+                        u.login,
+                        u.password_hash  
+                      FROM users u
+                      WHERE u.login = $1
+                  `;
 
     const result = await client.query(query, [username]);
     //console.log(result)
