@@ -21,8 +21,8 @@ export async function POST(req: NextRequest) {
         const newUserId = await AdminController.createUser(userData);
 
         return NextResponse.json({ message: "Пользователь создан", userId: newUserId }, { status: 201 });
-    } catch (err) {
-        
+    } catch {
+
         return NextResponse.json({ message: "Ошибка при создании пользователя" }, { status: 500 });
     }
 

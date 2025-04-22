@@ -1,6 +1,5 @@
-import {NextResponse} from "next/server";
-import db from "@/lib/db";
 import UserModel from "@/models/user";
+import pool from "@/lib/db";
 
 export interface NewUserData {
     login: string;
@@ -17,11 +16,11 @@ export interface NewUserData {
 
 export default class AdminController {
     static async createUser(data: NewUserData): Promise<boolean> {
-        const client = await db.connect()
+        const client = await pool.connect()
 
         try {
             await client.query("BEGIN")
-            const newUserId = await UserModel.createUserWithProfile(client, data);
+            await UserModel.createUserWithProfile(client, data);
             await client.query("COMMIT");
 
             return true;
