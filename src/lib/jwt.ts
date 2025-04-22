@@ -1,4 +1,5 @@
 import {jwtVerify, SignJWT} from 'jose';
+import {NextRequest, NextResponse} from "next/server";
 
 const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET);
 
@@ -23,6 +24,22 @@ export default class Jwt {
             .setIssuedAt()
             .setExpirationTime("24h")
             .sign(JWT_SECRET);
+    }
+
+    static async getDecoded(request: NextRequest) {
+        const token = request.cookies.get('token')?.value ||
+            request.headers.get('Authorization')?.split(' ')[1];
+
+        if (!token) {
+            return null;
+        }
+
+        const decoded = await Jwt.verifyToken(token);
+        if (!decoded || !('id' in decoded)) {
+            return null;
+        }
+
+        return decoded;
     }
 }
 
