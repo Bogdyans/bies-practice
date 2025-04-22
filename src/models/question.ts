@@ -15,6 +15,15 @@ export default class QuestionsModel {
         }
     }
 
+    static async getById(client: PoolClient, id: number) {
+        const query = 'SELECT * FROM "question" WHERE id = $1'
+        const values = [id];
+
+        const result = await client.query(query, values);
+        return result.rows[0] || null;
+    }
+
+
     static async changeStatusForQuestion(client: PoolClient, questionId: number, status: string){
         const query = 'UPDATE questions SET status = $1 WHERE id = $2'
         const values = [status, questionId]

@@ -16,4 +16,12 @@ export default class AnswersModel {
             throw err;
         }
     }
+
+    static async getById(client: PoolClient, id: number) {
+        const query = `SELECT * FROM answers WHERE id = $1`;
+        const values = [id];
+
+        const result = await client.query(query, values);
+        return result.rows[0] || null;
+    }
 }
