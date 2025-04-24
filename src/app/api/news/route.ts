@@ -4,12 +4,7 @@ import NewsController from "@/controllers/news";
 
 
 export async function GET(request: NextRequest) {
-    const token = request.cookies.get('token')?.value ||
-        request.headers.get('Authorization')?.split(' ')[1];
-    if (!token) {
-        return NextResponse.json({error: 'Unauthorized'}, {status: 401});
-    }
-    const decoded = await Jwt.verifyToken(token);
+    const decoded = await Jwt.getDecoded(request);
     if (!decoded || !('id' in decoded)) {
         return NextResponse.json({error: 'Unauthorized'}, {status: 401});
     }
