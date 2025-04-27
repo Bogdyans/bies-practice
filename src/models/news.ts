@@ -23,4 +23,32 @@ export default class NewsModel {
 
     return result.rows.length > 0 ? result.rows : null;
   }
+
+  static async createNewNews(client: PoolClient, userId: number, title: string, text: string, imagesPaths: string[]) {
+    const newsQuery = `
+                    INSERT INTO news(title, text, author_id, organization_id, publish_date)
+                        VALUES (
+                            $1, 
+                            $2, 
+                            (SELECT id FROM user_profile WHERE user_id = $3),
+                            (SELECT organization_id FROM otdels WHERE id = (SELECT otdel_id FROM users_profile WHERE user_id = $3)),
+                            CURRENT_TIMESTAMP
+                            RETURNING id;
+                    `
+    const values = [title, text, imagesPaths];
+
+    try {
+      const result = await client.query(newsQuery, values);
+      const newsId = result.rows[0].id;
+
+      for (const path of imagesPaths) {
+        await client.query(
+            'INSERT INTO news_photos (news_id, image_path, caption) VALUES ($1, $2, $2)',
+            [newsId, path]
+        );
+      }
+    } catch (error) {
+      throw error
+    }
+  }
 }
