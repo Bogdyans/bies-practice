@@ -20,13 +20,40 @@ export default class UserModel {
                     SELECT 
                         u.id, u.login, u.role_id, u.created_at, u.last_login_at, u.is_active,
                         up.fio, up.email, up.phone_number, up.job_title, up.otdel_id, up.location, up.pseudonim
-                    FROM "User" u
-                    LEFT JOIN "userprofile" up ON u.id = up.user_id
+                    FROM users u
+                    LEFT JOIN user_profiles up ON u.id = up.user_id
                     WHERE u.id = $1
                   `;
-    const result = await client.query(query, [userId]);
-    return result.rows[0] ?? null;
+
+    try {
+        const result = await client.query(query, [userId]);
+        return result.rows[0] ?? null;
+    } catch (error) {
+        throw error;
+    }
   }
+
+    static async findByIdProfile(client: PoolClient, userId: number) {
+        const query = `
+                    SELECT 
+                        u.id,
+                        up.fio, up.email, up.phone_number, up.job_title, up.location, up.pseudonim,
+                        ot.name as otdel,
+                        o.name as organization
+                    FROM users u
+                    LEFT JOIN user_profiles up ON u.id = up.user_id
+                    LEFT JOIN otdels ot ON ot.id = up.otdel_id
+                    LEFT JOIN organizations o ON o.id = ot.organization_id 
+                    WHERE u.id = $1
+                  `;
+
+        try {
+            const result = await client.query(query, [userId]);
+            return result.rows[0] ?? null;
+        } catch (error) {
+            throw error;
+        }
+    }
 
   static async findByUsername(client: PoolClient, username: string) {
     const query = `
@@ -38,9 +65,12 @@ export default class UserModel {
                       WHERE u.login = $1
                   `;
 
-    const result = await client.query(query, [username]);
-    //console.log(result)
-    return result.rows[0] ?? null;
+    try {
+        const result = await client.query(query, [username]);
+        return result.rows[0] ?? null;
+    } catch (error) {
+        throw error;
+    }
   }
 
   static async createUserWithProfile(client: PoolClient, data: NewUserData) {
@@ -59,7 +89,7 @@ export default class UserModel {
 
       await client.query(
           `
-            INSERT INTO "user_profiles" (
+            INSERT INTO user_profiles (
                 user_id, fio, email, phone_number, job_title, otdel_id, location, pseudonim
             )
             VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
