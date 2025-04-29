@@ -1,5 +1,5 @@
 import {jwtVerify, SignJWT} from 'jose';
-import {NextRequest, NextResponse} from "next/server";
+import {NextRequest} from "next/server";
 
 const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET);
 
