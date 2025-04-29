@@ -22,6 +22,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/api/controllers/connect_to_bd/conectToBd.tx", "src/app/api/controllers/auth/route.tx"],
   "exclude": ["node_modules"]
 }
