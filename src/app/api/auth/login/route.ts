@@ -3,8 +3,8 @@ import AuthController from "@/controllers/auth";
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
     try {
-        const { username, password } = await request.json();
-        const token = await AuthController.login(username, password);
+        const { login, password } = await request.json();
+        const token = await AuthController.login(login, password);
 
         const response = NextResponse.json({ token });
         response.cookies.set("token", token, {

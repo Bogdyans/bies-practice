@@ -1,12 +1,6 @@
 import { NextResponse } from "next/server"
-import { jwtVerify } from "jose"
 import type { NextRequest } from "next/server"
-
-//TODO: Затем в env закинуть
-
-const JWT_SECRET = new TextEncoder().encode("6h3f595EujNEuqQWMbBVK9bHJTZM/cIXKspLsPG4NWR2ZyNhnHOO3FgWz85k+Mf8\n" +
-    "1WO+lqpXgeYe8jIYvjg2SA==")
-
+import Jwt from "@/lib/jwt";
 
 export async function middleware(request: NextRequest) {
     const path = request.nextUrl.pathname
@@ -35,7 +29,7 @@ export async function middleware(request: NextRequest) {
 
     try {
 
-        await jwtVerify(token, JWT_SECRET)
+        await Jwt.verifyToken(token);
 
         return NextResponse.next()
     } catch (error) {
