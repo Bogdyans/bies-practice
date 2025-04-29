@@ -5,7 +5,8 @@ export const NEWS_TITLE_DATA = [
         title: "В «ОКБ «АКС» наградили победителей «AerospacePRO2024»!",
         date: "20/12/2024",
         photos: [
-            "/media/mock/news1.png"
+            "/media/mock/news1.png",
+            "/media/mock/news3.png"
         ]
     },
     {

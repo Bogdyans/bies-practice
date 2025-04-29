@@ -6,7 +6,7 @@ import { useState } from "react";
 export default function DefaultButton(
         { content, bg, onClick, className }
         :
-        { content: string, bg: string, onClick: () => void, className?: string }
+        { content: string, bg: string, onClick?: () => void, className?: string }
 ) {
     const [isBgDarker, setIsBgDarker] = useState<boolean>(false);
     const hoverBg = darkenColor(bg, 20);
