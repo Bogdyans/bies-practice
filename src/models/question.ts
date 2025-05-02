@@ -1,12 +1,15 @@
 import {PoolClient} from "pg";
 
 export default class QuestionsModel {
-    static async createNewQuestion(client: PoolClient ,text: string, userId: number, themeId: number){
+    static async createNewQuestion(client: PoolClient ,text: string, userId: number, theme: string){
+        const data = await client.query(`SELECT id FROM themes WHERE name = $1`, [theme]);
+        if (!data.rows[0]) throw new Error(`Theme not found`);
+
         const query = `
                         INSERT INTO questions (status, text, user_id, theme_id)
                         VALUES ('new', $1, $2, $3);
                       `;
-         const values =   [text, userId, themeId]
+         const values =   [text, userId, data.rows[0].id]
 
         try {
              await client.query(query, values);

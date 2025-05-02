@@ -16,3 +16,10 @@ export interface ContactForList {
     id: number;
     fio: string;
 }
+
+export interface AnswererData {
+    fio: string;
+    email: string;
+    job_title: string;
+    photo_url: string;
+}

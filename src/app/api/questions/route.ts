@@ -15,14 +15,14 @@ export async function POST(request: NextRequest) {
 
         const body = await request.json();
 
-        if (!body.text || !body.theme_id) {
+        if (!body.text || !body.theme) {
             return NextResponse.json(
                 { error: 'Invalid input' },
                 { status: 400 }
             );
         }
 
-        await QuestionController.createNewQuestion(body.text, decoded.id, body.theme_id)
+        await QuestionController.createNewQuestion(body.text, decoded.id, body.theme)
 
         return NextResponse.json(
             { status: 201 }
