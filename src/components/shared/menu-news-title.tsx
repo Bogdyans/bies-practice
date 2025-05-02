@@ -4,7 +4,7 @@ import {useState, useEffect} from "react";
 export default function NewsTitle(
         {title, date, photos}
         :
-        { title: string, date: string, photos: string[] }
+        { title: string, date: string, photos: { url: string, caption?: string }[] }
 ) {
     const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
     const [isTouching, setIsTouching] = useState<boolean>(false);
@@ -30,7 +30,7 @@ export default function NewsTitle(
                 <h3 className="font-medium mb-1 cursor-pointer">{title}</h3>
                 <div className="flex justify-between items-center text-[#a4a4a4] text-sm">
                     <span className="cursor-pointer hover:text-[#e30613] hover:drop-shadow-md transition-all duration-300">Читать далее</span>
-                    <span className="select-none">{date}</span>
+                    <span className="select-none">{date.slice(0, 10)}</span>
                 </div>
             </div>
             <div className="w-full h-48 relative overflow-hidden">
@@ -39,8 +39,8 @@ export default function NewsTitle(
                     {photos.map((photo, index) => (
                         <div key={index} className="w-full h-48 flex-shrink-0 relative">
                             <Image
-                                src={photo}
-                                alt={title}
+                                src={photo.url}
+                                alt={photo.url}
                                 fill
                                 className="object-cover"
                             />

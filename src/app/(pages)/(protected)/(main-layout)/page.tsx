@@ -1,19 +1,20 @@
 "use client"
 
-import { useState } from "react"
+import {useEffect, useState} from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 
 import { SERVICE_DATA } from "@/constants/service-data"
-import { NEWS_TITLE_DATA } from "@/constants/mock/news-title-data"
 import InfoWindow from "@/components/shared/info-window"
 import MenuServiceButton from "@/components/shared/menu-service-button"
 import NewsTitle from "@/components/shared/menu-news-title"
 import DefaultButton from "@/components/shared/buttons/button"
+import {News} from "@/types/news";
 
 export default function HomePage() {
     const router = useRouter()
     const [activeDescription, setActiveDescription] = useState<string | null>(null)
+    const [news, setNews] = useState<News[]>([]);
 
     const showTooltip = (description: string) => {
         setActiveDescription(description)
@@ -22,6 +23,33 @@ export default function HomePage() {
     const closeTooltip = () => {
         setActiveDescription(null)
     }
+
+    console.log(news)
+
+    useEffect(() => {
+        const fetchNews = async () => {
+            try {
+                const res = await fetch("/api/news?limit=2&offset=0", {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    credentials: "include" // если токен в cookie
+                });
+
+                if (!res.ok) {
+                    throw new Error("Ошибка при получении новостей");
+                }
+
+                const data = await res.json();
+                setNews(data.news)
+            } catch (error) {
+                console.error("Ошибка при загрузке новостей:", error);
+            }
+        };
+
+        fetchNews();
+    }, [],)
 
     return (
         <>
@@ -73,8 +101,8 @@ export default function HomePage() {
                         <h2 className="text-2xl font-bold mb-6">Новости и анонсы</h2>
 
                         <div className="space-y-6">
-                            {NEWS_TITLE_DATA.map((data) => (
-                                <NewsTitle key={data.title} title={data.title} date={data.date} photos={data.photos} />
+                            {news.map((data) => (
+                                <NewsTitle key={data.news_id} title={data.title} date={data.date} photos={data.photos} />
                             ))}
                             <div className="text-center">
                                 <Link href="/news" className="text-[#e30613] font-medium hover:underline">
@@ -95,8 +123,8 @@ export default function HomePage() {
                 <div className="px-4 mb-4 flex-grow md:hidden">
                     <h2 className="text-xl font-bold mb-4">Новости и анонсы</h2>
 
-                    {NEWS_TITLE_DATA.map((data) => (
-                        <NewsTitle key={data.title} title={data.title} date={data.date} photos={data.photos} />
+                    {news.map((data) => (
+                        <NewsTitle key={data.news_id} title={data.title} date={data.date} photos={data.photos} />
                     ))}
                 </div>
 

@@ -8,7 +8,17 @@ export default class NewsModel {
                         n.id AS news_id,
                         n.title,
                         n.text,
-                        n.publish_date
+                        n.publish_date as date,
+                        COALESCE(
+                            (
+                                SELECT json_agg(json_build_object(
+                                    'url', np.image_path,
+                                    'caption', np.caption
+                                ))
+                                FROM news_photos np
+                                WHERE np.news_id = n.id
+                            ), '[]'::json
+                        ) AS photos
                     FROM news n
                     JOIN organizations o ON n.organization_id = o.id
                     JOIN otdels ot ON o.id = ot.organization_id
