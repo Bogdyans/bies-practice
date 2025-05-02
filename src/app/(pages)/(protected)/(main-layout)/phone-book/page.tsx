@@ -1,9 +1,30 @@
+'use client'
+
 import { SearchIcon, ArrowIcon } from "@/components/ui/icons";
-import { CONTACTS_DATA } from "@/constants/mock/contacts-data";
 import ContactButton from "@/components/shared/contact-button";
+import {useEffect, useState} from "react";
+import {ContactForList} from "@/types/contact";
 
 export default function PhoneBookPage() {
-  return (
+   const [contacts, setContacts] = useState<ContactForList[]>([]);
+
+   useEffect(() => {
+       const fetchData = async () => {
+           const response = await fetch('/api/contacts', {
+               headers: {
+                   'Content-Type': 'application/json'
+               }
+           })
+
+           const data = await response.json();
+           setContacts(data.contacts);
+       }
+
+       fetchData()
+   }, [])
+
+
+   return (
     <div className="min-h-screen p-4">
       <div className="mx-auto h-14 bg-[#F5F5F5] flex justify-center items-center border-1 border-solid border-[#A4A4A4] rounded-[10px]">
         <SearchIcon className="h-[22px] w-[22px] m-3 shrink-0 text-[#6D6D6D]" />
@@ -14,11 +35,11 @@ export default function PhoneBookPage() {
         />
       </div>
       <div className="py-4 flex justify-center flex-col items-center">
-        {CONTACTS_DATA.map((data) => (
+        {contacts.map((data) => (
           <ContactButton
             key={data.id}
             href={`/phone-book/${data.id}`}
-            title={data.title}
+            title={data.fio}
             Icon={ArrowIcon}
           />
         ))}

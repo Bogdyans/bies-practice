@@ -11,3 +11,8 @@ export interface Contact {
     location: string;
     pseudonim: string;
 }
+
+export interface ContactForList {
+    id: number;
+    fio: string;
+}
