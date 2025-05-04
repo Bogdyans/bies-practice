@@ -37,7 +37,7 @@ export default class UserModel {
         const query = `
                     SELECT 
                         u.id,
-                        up.fio, up.email, up.phone_number, up.job_title, up.location, up.pseudonim,
+                        up.fio, up.email, up.phone_number, up.job_title, up.location, up.pseudonim, up.photo_url,
                         ot.name as otdel,
                         o.name as organization
                     FROM users u

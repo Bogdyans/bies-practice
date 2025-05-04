@@ -80,7 +80,7 @@ export default function ProfilePage() {
           {/* Profile Photo */}
           <div className="w-32 h-40 md:w-48 md:h-60 rounded-lg overflow-hidden md:mt-12">
             <Image
-                src="/file.svg"
+                src={profileData.photo_url}
                 alt="Profile Photo"
                 width={128}
                 height={160}

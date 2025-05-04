@@ -10,6 +10,7 @@ export interface Contact {
     organization: string;
     location: string;
     pseudonim: string;
+    photo_url: string;
 }
 
 export interface ContactForList {
