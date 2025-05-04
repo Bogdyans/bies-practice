@@ -12,6 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import DefaultButton from "@/components/shared/buttons/button";
 
 interface FormData {
   login: string;
@@ -100,13 +101,13 @@ export default function CreateUserPage() {
   };
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen mx-auto max-w-7xl">
       <div className="px-4 py-4 flex items-center flex-col border-b border-gray-200">
         <h1 className="text-xl font-bold">Создание пользователя</h1>
         <p className="text-sm text-gray-500">Заполните все обязательные поля</p>
       </div>
 
-      <div className="flex-1 px-4 py-4 overflow-auto pb-20">
+      <div className="flex-1 px-4 py-4 overflow-auto">
         {success && (
           <div className="mb-4 p-3 bg-green-100 text-green-800 rounded-lg flex items-center">
             <span>Пользователь успешно создан!</span>
@@ -315,13 +316,28 @@ export default function CreateUserPage() {
           </div>
 
           <div className="pt-4">
-            <button
+            {/* <button
               type="submit"
               disabled={isLoading}
               className="w-full py-4 bg-[#e30613] text-white rounded-md font-medium disabled:opacity-70"
             >
               {isLoading ? "Создание..." : "Создать пользователя"}
-            </button>
+            </button> */}
+            <DefaultButton
+              content="Создать пользователя"
+              bg={"#e30613"}
+              onClick={() => handleSubmit}
+              className="py-4 rounded-md font-medium"
+            />
+          </div>
+
+          <div className="pt-2">
+            <DefaultButton
+              content="Отмена"
+              bg={"#b6b6b6"}
+              onClick={() => router.push("/")}
+              className="block w-full py-4 rounded-md font-medium text-center"
+            />
           </div>
         </form>
       </div>
