@@ -1,10 +1,13 @@
-"use client"
+"use client";
 
 import { AlertCircle, Check, ImageIcon, Plus, X } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import Image from "next/image";
+import DefaultButton from "@/components/shared/buttons/button";
+import { Input } from "@/components/ui/input";
+import XButton from "@/components/shared/buttons/x-button";
 
 interface FormData {
   title: string;
@@ -113,7 +116,7 @@ export default function CreateNewsPage() {
   };
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen mx-auto max-w-7xl">
       <div className="px-4 py-4 flex flex-col items-center border-b border-gray-200">
         <h1 className="text-xl font-bold">Создание новости</h1>
         <p className="text-sm text-gray-500">
@@ -143,7 +146,7 @@ export default function CreateNewsPage() {
               <label htmlFor="title" className="block text-sm font-medium mb-1">
                 Заголовок <span className="text-[#e30613]">*</span>
               </label>
-              <input
+              <Input
                 type="text"
                 id="title"
                 name="title"
@@ -181,7 +184,7 @@ export default function CreateNewsPage() {
                 Изображения
               </label>
 
-              <input
+              <Input
                 type="file"
                 ref={fileInputRef}
                 onChange={handleImageChange}
@@ -202,54 +205,78 @@ export default function CreateNewsPage() {
                       fill
                       className="object-cover"
                     />
-                    <button
+                    {/* <button
                       type="button"
                       onClick={() => removeImage(index)}
                       className="absolute top-1 right-1 bg-white rounded-full p-1 shadow-md"
                     >
                       <X className="w-3 h-3 text-[#e30613]" />
-                    </button>
+                    </button> */}
+                    <XButton
+                      onClick={() => removeImage(index)}
+                      className={
+                        "absolute top-1 right-1 bg-white rounded-full p-1 shadow-md"
+                      }
+                    />
                   </div>
                 ))}
 
-                <button
+                {/* <button
                   type="button"
                   onClick={triggerFileInput}
-                  className="aspect-square rounded-md border-2 border-dashed border-gray-300 flex flex-col items-center justify-center bg-white"
+                  className="aspect-square rounded-md border-2 border-dashed border-gray-300 flex flex-col items-center justify-center bg-white hover:cursor-pointer"
                 >
                   <Plus className="w-6 h-6 text-gray-400" />
-                  <span className="text-xs text-gray-500 mt-1">Добавить</span>
-                </button>
+                  </button> */}
+                <DefaultButton
+                  content="Добавить"
+                  bg={"#b6b6b6"}
+                  onClick={triggerFileInput}
+                  className="aspect-square rounded-md border-2 border-dashed border-white flex flex-col items-center justify-center text-s mt-1"
+                />
               </div>
 
-              <button
+              {/* <button
                 type="button"
                 onClick={triggerFileInput}
                 className="w-full py-2 border border-gray-300 rounded-md flex items-center justify-center gap-2 bg-white"
               >
                 <ImageIcon className="w-4 h-4" />
                 <span>Загрузить изображения</span>
-              </button>
+              </button> */}
+              <DefaultButton
+                content="Загрузить изображения"
+                bg={"#b6b6b6"}
+                onClick={triggerFileInput}
+                className="w-full py-2 border rounded-md flex items-center justify-center gap-2"
+              />
             </div>
           </div>
 
           <div className="pt-4">
-            <button
+            {/* <button
               type="submit"
               disabled={isLoading}
               className="w-full py-4 bg-[#e30613] text-white rounded-md font-medium disabled:opacity-70"
             >
               {isLoading ? "Создание..." : "Опубликовать новость"}
-            </button>
+            </button> */}
+            <DefaultButton
+              content="Опубликовать новость"
+              bg={"#e30613"}
+              onClick={() => handleSubmit}
+              className="w-full py-4 bg-[#e30613] text-white rounded-md font-medium disabled:opacity-70"
+            />
           </div>
 
           <div className="pt-2">
-            <Link
+            {/* <Link
               href="/admin/news"
               className="block w-full py-4 bg-[#b6b6b6] text-white rounded-md font-medium text-center"
             >
               Отмена
-            </Link>
+            </Link> */}
+            <DefaultButton content="Отмена" bg={"#b6b6b6"} onClick={() => router.push("/")} className="block w-full py-4 rounded-md font-medium text-center" />
           </div>
         </form>
       </div>
