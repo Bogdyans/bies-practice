@@ -65,7 +65,7 @@ export default class NewsModel {
                   o.organization_id,
                   CURRENT_TIMESTAMP
                   FROM 
-                  users_profile up
+                  user_profiles up
                   JOIN 
                   otdels o ON o.id = up.otdel_id
                   WHERE 

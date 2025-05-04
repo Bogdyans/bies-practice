@@ -23,7 +23,7 @@ export default class NewsController {
     }
 
     static async createNews(authorId: number, title: string, text: string, images: File[]) {
-        const uploadDir = path.join(process.cwd(), 'public', 'media', 'mock');
+        const uploadDir = path.join(process.cwd(), 'public', 'uploads', 'news');
 
         const imagePaths: string[] = [];
 
@@ -38,7 +38,7 @@ export default class NewsController {
 
             await writeFile(filepath, buffer);
 
-            imagePaths.push(`/media/mock/${filename}`);
+            imagePaths.push(`/uploads/news/${filename}`);
         }
 
         const client = await pool.connect();
