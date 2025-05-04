@@ -2,9 +2,7 @@
 
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { ROLES_DATA } from "@/constants/mock/roles-data";
-import { DEPARTMENTS_DATA } from "@/constants/mock/departments-data";
+import { useEffect, useState } from "react";
 import {
   Select,
   SelectContent,
@@ -23,8 +21,25 @@ interface FormData {
   phone_number: string;
   job_title: string;
   otdel_id: number;
+  organization_id: number;
   location: string;
   pseudonim?: string;
+}
+
+interface Organization {
+  id: number;
+  name: string;
+}
+
+interface Department {
+  id: number;
+  name: string;
+  organization_id: number;
+}
+
+interface Role {
+  id: number;
+  name: string;
 }
 
 export default function CreateUserPage() {
@@ -41,9 +56,81 @@ export default function CreateUserPage() {
     phone_number: "",
     job_title: "",
     otdel_id: 0,
+    organization_id: 0,
     location: "",
     pseudonim: "",
   });
+  const [roles, setRoles] = useState<Role[]>();
+  const [organizations, setOrganizations] = useState<Organization[]>();
+  const [departments, setDepartments] = useState<Department[]>();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const rolesRes = await fetch("/api/admin/fetch-info/roles", {
+          method: "GET",
+          headers: {
+            "Content-Type": "aplication/json",
+          },
+          credentials: "include",
+        });
+
+        if (!rolesRes.ok) {
+          throw new Error("Ошибка при получении ролей");
+        }
+
+        const rolesData = await rolesRes.json();
+        setRoles(rolesData.roles);
+
+        const orgsRes = await fetch("/api/admin/fetch-info/organizations", {
+          method: "GET",
+          headers: {
+            "Content-Type": "aplication/json",
+          },
+          credentials: "include",
+        });
+
+        if (!orgsRes.ok) {
+          throw new Error("Ошибка при получении организаций");
+        }
+
+        const orgsData = await orgsRes.json();
+        setOrganizations(orgsData.organizations);
+      } catch (error) {
+        console.error("Ошибка при загрузке организаций: ", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    const fetchDepartments = async () => {
+      try {
+        const departmentsRes = await fetch(
+          `/api/admin/fetch-info/departments?organization_id=${formData.organization_id}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "aplication/json",
+            },
+            credentials: "include",
+          }
+        );
+
+        if (!departmentsRes.ok) {
+          throw new Error("Ошибка при получении отделов");
+        }
+
+        const departmentsData = await departmentsRes.json();
+        setDepartments(departmentsData.departments);
+      } catch (error) {
+        console.error("Ошибка при загрузке отделов: ", error);
+      }
+    };
+
+    fetchDepartments();
+  }, [formData.organization_id]);
 
   const handleChange = (e: { target: { name: string; value: string } }) => {
     const { name, value } = e.target;
@@ -84,6 +171,7 @@ export default function CreateUserPage() {
           phone_number: "",
           job_title: "",
           otdel_id: 0,
+          organization_id: 0,
           location: "",
           pseudonim: "",
         });
@@ -173,7 +261,7 @@ export default function CreateUserPage() {
                   <SelectValue placeholder="Выберите роль" />
                 </SelectTrigger>
                 <SelectContent>
-                  {ROLES_DATA.map((role) => (
+                  {roles?.map((role) => (
                     <SelectItem key={role.id} value={role.id.toString()}>
                       {role.name}
                     </SelectItem>
@@ -253,6 +341,31 @@ export default function CreateUserPage() {
             </div>
 
             <div>
+              <label htmlFor="organization_id" className="block text-sm font-medium mb-1">
+                Организация <span className="text-[#e30613]">*</span>
+              </label>
+              <Select
+                value={formData.organization_id.toString()}
+                onValueChange={(value) => {
+                  handleChange( {target: {name: "organization_id", value}});
+                  setFormData(prev => ({ ...prev, otdel_id: 0}));
+                }}
+                required
+              >
+                <SelectTrigger id="organization_id" className="w-full bg-white">
+                  <SelectValue placeholder="Выберите организацию" />
+                </SelectTrigger>
+                <SelectContent>
+                  {organizations?.map((org) => (
+                    <SelectItem key={org.id} value={org.id.toString()}>
+                      {org.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div>
               <label
                 htmlFor="otdel_id"
                 className="block text-sm font-medium mb-1"
@@ -270,7 +383,7 @@ export default function CreateUserPage() {
                   <SelectValue placeholder="Выберите отдел" />
                 </SelectTrigger>
                 <SelectContent>
-                  {DEPARTMENTS_DATA.map((dept) => (
+                  {departments?.map((dept) => (
                     <SelectItem key={dept.id} value={dept.id.toString()}>
                       {dept.name}
                     </SelectItem>
