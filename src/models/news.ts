@@ -28,7 +28,7 @@ export default class NewsModel {
                     JOIN otdels ot ON o.id = ot.organization_id
                     JOIN user_profiles up ON ot.id = up.otdel_id
                     WHERE up.user_id = $1
-                    ORDER BY n.publish_date DESC
+                    ORDER BY n.publish_date, n.id DESC
                     LIMIT $2 OFFSET $3;
                   `;
 
@@ -84,6 +84,24 @@ export default class NewsModel {
           [newsId, path, path]
         );
       }
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async getNewsCountForOrganization(client: PoolClient, userId: number,) {
+    const query = `
+      SELECT COUNT(*) as total
+      FROM news n
+      JOIN organizations o ON n.organization_id = o.id
+      JOIN otdels ot ON o.id = ot.organization_id
+      JOIN user_profiles up ON ot.id = up.otdel_id
+      WHERE up.user_id = $1;
+    `
+    try {
+      const result = await client.query(query, [userId])
+
+      return result.rows.length > 0 ? result.rows[0] : 0;
     } catch (error) {
       throw error;
     }

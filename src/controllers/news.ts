@@ -11,9 +11,10 @@ export default class NewsController {
         const client = await db.connect()
 
         try {
+            const total = await NewsModel.getNewsCountForOrganization(client, userId);
             const news = await NewsModel.getNews(client, userId, limit, offset);
 
-            return news;
+            return { news, total };
         } catch (error) {
             console.log(error);
             throw error;

@@ -102,7 +102,7 @@ export default function CreateNewsPage() {
         setImagePreviews([]);
 
         setTimeout(() => {
-          router.push("/admin-page/create-news");
+          router.push("/admin/create-news");
         }, 2000);
       } else {
         const data = await response.json();
@@ -205,13 +205,7 @@ export default function CreateNewsPage() {
                       fill
                       className="object-cover"
                     />
-                    {/* <button
-                      type="button"
-                      onClick={() => removeImage(index)}
-                      className="absolute top-1 right-1 bg-white rounded-full p-1 shadow-md"
-                    >
-                      <X className="w-3 h-3 text-[#e30613]" />
-                    </button> */}
+
                     <XButton
                       onClick={() => removeImage(index)}
                       className={
@@ -221,13 +215,6 @@ export default function CreateNewsPage() {
                   </div>
                 ))}
 
-                {/* <button
-                  type="button"
-                  onClick={triggerFileInput}
-                  className="aspect-square rounded-md border-2 border-dashed border-gray-300 flex flex-col items-center justify-center bg-white hover:cursor-pointer"
-                >
-                  <Plus className="w-6 h-6 text-gray-400" />
-                  </button> */}
                 <DefaultButton
                   content="Добавить"
                   bg={"#b6b6b6"}
@@ -236,14 +223,7 @@ export default function CreateNewsPage() {
                 />
               </div>
 
-              {/* <button
-                type="button"
-                onClick={triggerFileInput}
-                className="w-full py-2 border border-gray-300 rounded-md flex items-center justify-center gap-2 bg-white"
-              >
-                <ImageIcon className="w-4 h-4" />
-                <span>Загрузить изображения</span>
-              </button> */}
+
               <DefaultButton
                 content="Загрузить изображения"
                 bg={"#b6b6b6"}
@@ -254,13 +234,6 @@ export default function CreateNewsPage() {
           </div>
 
           <div className="pt-4">
-            {/* <button
-              type="submit"
-              disabled={isLoading}
-              className="w-full py-4 bg-[#e30613] text-white rounded-md font-medium disabled:opacity-70"
-            >
-              {isLoading ? "Создание..." : "Опубликовать новость"}
-            </button> */}
             <DefaultButton
               content="Опубликовать новость"
               bg={"#e30613"}
@@ -270,12 +243,6 @@ export default function CreateNewsPage() {
           </div>
 
           <div className="pt-2">
-            {/* <Link
-              href="/admin/news"
-              className="block w-full py-4 bg-[#b6b6b6] text-white rounded-md font-medium text-center"
-            >
-              Отмена
-            </Link> */}
             <DefaultButton content="Отмена" bg={"#b6b6b6"} onClick={() => router.push("/")} className="block w-full py-4 rounded-md font-medium text-center" />
           </div>
         </form>
