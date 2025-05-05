@@ -38,6 +38,37 @@ export default class NewsModel {
     return result.rows.length > 0 ? result.rows : null;
   }
 
+  static async findNewsById(client: PoolClient, id: number) {
+    const query = `
+      SELECT 
+        n.id AS news_id,
+        n.title,
+        n.text,
+        n.publish_date as date,
+        n.organization_id,
+        COALESCE(
+            (
+                SELECT json_agg(json_build_object(
+                    'url', np.image_path,
+                    'caption', np.caption
+                ))
+                FROM news_photos np
+                WHERE np.news_id = n.id
+            ), '[]'::json
+        ) AS photos
+      FROM news n
+      WHERE n.id = $1;
+    `
+    try {
+      const newsData = await client.query(query, [id]);
+
+      console.log(newsData.rows);
+      return newsData.rows.length > 0 ? newsData.rows[0] : null;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   static async createNewNews(
     client: PoolClient,
     userId: number,
@@ -45,18 +76,7 @@ export default class NewsModel {
     text: string,
     imagesPaths: string[]
   ) {
-    const newsQuery =
-      // `
-      //                 INSERT INTO news(title, text, author_id, organization_id, publish_date)
-      //                     VALUES (
-      //                         $1,
-      //                         $2,
-      //                         (SELECT id FROM user_profile WHERE user_id = $3),
-      //                         (SELECT organization_id FROM otdels WHERE id = (SELECT otdel_id FROM users_profile WHERE user_id = $3)),
-      //                         CURRENT_TIMESTAMP
-      //                         RETURNING id;
-      //                 `
-      `
+    const newsQuery = `
                   INSERT INTO news(title, text, author_id, organization_id, publish_date)
                   SELECT 
                   $1, 

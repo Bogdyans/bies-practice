@@ -7,7 +7,6 @@ import {usePathname} from "next/navigation";
 
 export default function HeaderDesktop() {
     const path = usePathname();
-    console.log(path)
 
     return (
         <header className="border-b border-[#f5f5f5] bg-white">

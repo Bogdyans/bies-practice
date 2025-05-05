@@ -4,9 +4,31 @@ import {v4 as uuidv4} from "uuid";
 import path from "path";
 import {writeFile} from "fs/promises";
 import pool from "@/lib/db";
+import UserModel from "@/models/user";
 
 
 export default class NewsController {
+    static async getNewsById(user_id: number, news_id: number) {
+        const client = await pool.connect();
+
+        try {
+            const org_id = await UserModel.getOrganizationForUser(client, user_id);
+            const newsData = await NewsModel.findNewsById(client, news_id);
+
+
+            if (newsData.organization_id !== org_id) {
+                throw new Error('This news is not for you');
+            }
+
+            return newsData;
+        } catch (error) {
+            console.log(error);
+            throw error;
+        } finally {
+            client.release();
+        }
+    }
+
     static async getNews(userId: number, limit: number, offset: number) {
         const client = await db.connect()
 

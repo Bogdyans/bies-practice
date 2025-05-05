@@ -15,23 +15,24 @@ export interface NewUserData {
 }
 
 export default class UserModel {
-  static async findById(client: PoolClient, userId: number) {
-    const query = `
-                    SELECT 
-                        u.id, u.login, u.role_id, u.created_at, u.last_login_at, u.is_active,
-                        up.fio, up.email, up.phone_number, up.job_title, up.otdel_id, up.location, up.pseudonim
-                    FROM users u
-                    LEFT JOIN user_profiles up ON u.id = up.user_id
-                    WHERE u.id = $1
-                  `;
+    static async getOrganizationForUser(client: PoolClient, userId: number) {
+        const query = `
+            SELECT org.id as id
+            FROM organizations org
+            JOIN otdels o ON o.organization_id = org.id
+            JOIN user_profiles u ON u.otdel_id = o.id
+            WHERE u.user_id = $1;
+        `;
 
-    try {
-        const result = await client.query(query, [userId]);
-        return result.rows[0] ?? null;
-    } catch (error) {
-        throw error;
+        try {
+            const orgId = await client.query(query, [userId]);
+
+            return orgId.rows[0].id;
+        } catch (error) {
+            throw error;
+        }
+
     }
-  }
 
     static async findByIdProfile(client: PoolClient, userId: number) {
         const query = `
