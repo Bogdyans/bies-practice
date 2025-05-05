@@ -2,7 +2,8 @@
 
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import {
   Select,
   SelectContent,
@@ -11,6 +12,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import DefaultButton from "@/components/shared/buttons/button";
+import { ImageIcon, X } from "lucide-react";
 
 interface FormData {
   login: string;
@@ -24,6 +26,7 @@ interface FormData {
   organization_id: number;
   location: string;
   pseudonim?: string;
+  avatar?: File | null;
 }
 
 interface Organization {
@@ -47,6 +50,8 @@ export default function CreateUserPage() {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [formData, setFormData] = useState<FormData>({
     login: "",
     password: "",
@@ -59,6 +64,7 @@ export default function CreateUserPage() {
     organization_id: 0,
     location: "",
     pseudonim: "",
+    avatar: null,
   });
   const [roles, setRoles] = useState<Role[]>();
   const [organizations, setOrganizations] = useState<Organization[]>();
@@ -143,6 +149,34 @@ export default function CreateUserPage() {
     }));
   };
 
+  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const file = e.target.files[0];
+      setFormData((prev) => ({
+        ...prev, avatar: file,
+      }))
+
+      const previewUrl = URL.createObjectURL(file);
+      setAvatarPreview(previewUrl);
+    }
+  }
+
+  const triggerFileInput = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click()
+    }
+  }
+
+  const removeAvatar = () => {
+    if (avatarPreview) {
+      URL.revokeObjectURL(avatarPreview)
+    }
+    setAvatarPreview(null)
+    setFormData((prev) => ({
+      ...prev, avatar: null,
+    }))
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
@@ -150,18 +184,31 @@ export default function CreateUserPage() {
     setSuccess(false);
 
     try {
+      const formDataToSend = new FormData()
+
+      Object.entries(formData).forEach(([key, value]) => {
+        if (key !== "avatar" && value !== null && value !== undefined) {
+          formDataToSend.append(key, value.toString());
+        }
+      })
+
+      if (formData.avatar) {
+        formDataToSend.append("avatar", formData.avatar);
+      }
+
       const response = await fetch("/api/admin/add-user", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
+        body: formDataToSend,
       });
 
       const data = await response.json();
 
       if (response.ok) {
         setSuccess(true);
+        if (avatarPreview) {
+          URL.revokeObjectURL(avatarPreview);
+        }
+        setAvatarPreview(null);
         setFormData({
           login: "",
           password: "",
@@ -174,6 +221,7 @@ export default function CreateUserPage() {
           organization_id: 0,
           location: "",
           pseudonim: "",
+          avatar: null,
         });
         setTimeout(() => {
           router.push("/admin-page/create-user");
@@ -269,6 +317,43 @@ export default function CreateUserPage() {
                 </SelectContent>
               </Select>
             </div>
+            <div>
+              <label className="block text-sm font-medium mb-2">Аватар пользователя</label>
+
+              <input type="file" ref={fileInputRef} onChange={handleAvatarChange} accept="image/*" className="hidden" />
+
+              <div className="flex items-center space-x-4">
+                <div className="relative w-24 h-24 rounded-full overflow-hidden border border-gray-300 bg-white flex items-center justify-center">
+                  {avatarPreview ? (
+                    <>
+                      <Image
+                        src={avatarPreview || "/placeholder.svg"}
+                        alt="Предпросмотр аватара"
+                        fill
+                        className="object-cover"
+                      />
+                      <button
+                        type="button"
+                        onClick={removeAvatar}
+                        className="absolute right-[10px] top-[10px] bg-white rounded-full p-1 shadow-md"
+                      >
+                        <X className="w-3 h-3 text-[#e30613]" />
+                      </button>
+                    </>
+                  ) : (
+                    <ImageIcon className="w-8 h-8 text-gray-400" />
+                  )}
+                </div>
+
+                <button
+                  type="button"
+                  onClick={triggerFileInput}
+                  className="py-2 px-4 border border-gray-300 rounded-md flex items-center justify-center gap-2 bg-white"
+                >
+                  <span>Загрузить фото</span>
+                </button>
+              </div>
+            </div>
           </div>
 
           <div className="bg-[#f5f5f5] rounded-lg p-4 space-y-4">
@@ -341,14 +426,17 @@ export default function CreateUserPage() {
             </div>
 
             <div>
-              <label htmlFor="organization_id" className="block text-sm font-medium mb-1">
+              <label
+                htmlFor="organization_id"
+                className="block text-sm font-medium mb-1"
+              >
                 Организация <span className="text-[#e30613]">*</span>
               </label>
               <Select
                 value={formData.organization_id.toString()}
                 onValueChange={(value) => {
-                  handleChange( {target: {name: "organization_id", value}});
-                  setFormData(prev => ({ ...prev, otdel_id: 0}));
+                  handleChange({ target: { name: "organization_id", value } });
+                  setFormData((prev) => ({ ...prev, otdel_id: 0 }));
                 }}
                 required
               >
@@ -429,13 +517,6 @@ export default function CreateUserPage() {
           </div>
 
           <div className="pt-4">
-            {/* <button
-              type="submit"
-              disabled={isLoading}
-              className="w-full py-4 bg-[#e30613] text-white rounded-md font-medium disabled:opacity-70"
-            >
-              {isLoading ? "Создание..." : "Создать пользователя"}
-            </button> */}
             <DefaultButton
               content="Создать пользователя"
               bg={"#e30613"}
@@ -448,7 +529,7 @@ export default function CreateUserPage() {
             <DefaultButton
               content="Отмена"
               bg={"#b6b6b6"}
-              onClick={() => router.push("/")}
+              onClick={() => router.push("/admin-page")}
               className="block w-full py-4 rounded-md font-medium text-center"
             />
           </div>

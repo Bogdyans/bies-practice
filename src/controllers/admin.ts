@@ -1,5 +1,7 @@
 import UserModel from "@/models/user";
 import pool from "@/lib/db";
+import path from "path";
+import fs from 'fs/promises';
 
 export interface NewUserData {
     login: string;
@@ -12,6 +14,7 @@ export interface NewUserData {
     otdel_id: number;
     location: string;
     pseudonim?: string;
+    avatar?: File;
 }
 
 export default class AdminController {
@@ -20,7 +23,12 @@ export default class AdminController {
 
         try {
             await client.query("BEGIN")
-            await UserModel.createUserWithProfile(client, data);
+
+            let photoUrl = null;
+            if (data.avatar) {
+                photoUrl = await this.saveAvatar(data.avatar);
+            }
+            await UserModel.createUserWithProfile(client, { ...data, photoUrl });
             await client.query("COMMIT");
 
             return true;
@@ -32,6 +40,27 @@ export default class AdminController {
             throw Error("Error creating new user")
         } finally {
             client.release();
+        }
+    }
+
+    private static async saveAvatar(avatarFile: File): Promise<String> {
+        try {
+            const uploadDir = path.join(process.cwd(), 'public', 'uploads', 'avatars');
+            await fs.mkdir(uploadDir, { recursive: true });
+
+            const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+            const ext = avatarFile.name.split('.').pop();
+            const filename = `avatar-${uniqueSuffix}.${ext}`;
+            const filePath = path.join(uploadDir, filename);
+
+            const bytes = await avatarFile.arrayBuffer();
+            const buffer = Buffer.from(bytes);
+            await fs.writeFile(filePath, buffer);
+
+            return `/uploads/avatars/${filename}`;
+        } catch (error) {
+            console.error("Ошибка при сохранении аватарки: ", error);
+            throw new Error("Failed to save avatar");
         }
     }
 }

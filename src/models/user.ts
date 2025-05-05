@@ -12,13 +12,14 @@ export interface NewUserData {
   otdel_id: number;
   location: string;
   pseudonim?: string;
+  avatar?: File;
 }
 
 export default class UserModel {
   static async findById(client: PoolClient, userId: number) {
     const query = `
                     SELECT 
-                        u.id, u.login, u.role_id, u.created_at, u.last_login_at, u.is_active,
+                        u.id, u.login, u.role_id, u.created_at,
                         up.fio, up.email, up.phone_number, up.job_title, up.otdel_id, up.location, up.pseudonim
                     FROM users u
                     LEFT JOIN user_profiles up ON u.id = up.user_id
@@ -73,7 +74,7 @@ export default class UserModel {
     }
   }
 
-  static async createUserWithProfile(client: PoolClient, data: NewUserData) {
+  static async createUserWithProfile(client: PoolClient, data: NewUserData & { photoUrl?: string }) {
     try {
       const hashedPassword = await bcrypt.hash(data.password, 10);
 
@@ -90,9 +91,9 @@ export default class UserModel {
       await client.query(
           `
             INSERT INTO user_profiles (
-                user_id, fio, email, phone_number, job_title, otdel_id, location, pseudonim
+                user_id, fio, email, phone_number, job_title, otdel_id, location, pseudonim, photo_url
             )
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
         `,
           [
             userId,
@@ -103,6 +104,7 @@ export default class UserModel {
             data.otdel_id,
             data.location,
             data.pseudonim || null,
+            data.photoUrl || null
           ]
       );
 
