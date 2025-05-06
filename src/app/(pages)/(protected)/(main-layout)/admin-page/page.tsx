@@ -8,7 +8,7 @@ export default function AdminPage() {
         <h1 className="text-xl font-bold">Панель администрации</h1>
         <p className="text-sm text-gray-500">Выберите нужную функцию</p>
       </div>
-      <div className="py-4 flex justify-center flex-col items-center mx-50">
+      <div className="py-4 flex justify-center flex-col items-center">
         <ContactButton
           href={"/admin-page/create-news"}
           title={"Панель создания новостей"}

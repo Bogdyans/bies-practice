@@ -1,7 +1,6 @@
 "use client";
 
 import { AlertCircle, Check, ImageIcon, Plus, X } from "lucide-react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import Image from "next/image";
@@ -102,7 +101,7 @@ export default function CreateNewsPage() {
         setImagePreviews([]);
 
         setTimeout(() => {
-          router.push("/admin-page/create-news");
+          router.push("/admin-page");
         }, 2000);
       } else {
         const data = await response.json();
@@ -213,21 +212,23 @@ export default function CreateNewsPage() {
                     />
                   </div>
                 ))}
-
+                <div onClick={(e) => e.preventDefault()}>
+                  <DefaultButton
+                    content="Добавить"
+                    bg={"#b6b6b6"}
+                    onClick={triggerFileInput}
+                    className="aspect-square rounded-md border-2 border-dashed border-white flex flex-col items-center justify-center text-s mt-1"
+                  />
+                </div>
+              </div>
+              <div onClick={(e) => e.preventDefault()}>
                 <DefaultButton
-                  content="Добавить"
+                  content="Загрузить изображения"
                   bg={"#b6b6b6"}
                   onClick={triggerFileInput}
-                  className="aspect-square rounded-md border-2 border-dashed border-white flex flex-col items-center justify-center text-s mt-1"
+                  className="w-full py-2 border rounded-md flex items-center justify-center gap-2"
                 />
               </div>
-
-              <DefaultButton
-                content="Загрузить изображения"
-                bg={"#b6b6b6"}
-                onClick={triggerFileInput}
-                className="w-full py-2 border rounded-md flex items-center justify-center gap-2"
-              />
             </div>
           </div>
 
@@ -240,7 +241,7 @@ export default function CreateNewsPage() {
             />
           </div>
 
-          <div className="pt-2">
+          <div className="pt-2" onClick={(e) => e.preventDefault()}>
             <DefaultButton
               content="Отмена"
               bg={"#b6b6b6"}
