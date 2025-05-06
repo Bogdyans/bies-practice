@@ -239,7 +239,7 @@ export default function CreateUserPage() {
           avatar: null,
         });
         setTimeout(() => {
-          router.push("/admin-page");
+          router.push("/admin");
         }, 2000);
       } else {
         setError(data.message || "Произошла ошибка при создании пользователя");
@@ -564,7 +564,7 @@ export default function CreateUserPage() {
             <DefaultButton
               content="Отмена"
               bg={"#b6b6b6"}
-              onClick={() => router.push("/admin-page")}
+              onClick={() => router.push("/admin")}
               className="block w-full py-4 rounded-md font-medium text-center"
             />
           </div>

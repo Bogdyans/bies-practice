@@ -52,9 +52,9 @@ export default function HeaderDesktop() {
               ))}
               {isUserAdmin == true ? 
                 <Link
-                  href={"/admin-page"}
+                  href={"/admin"}
                   className={`font-medium ${
-                    path === "/admin-page" ? "text-[#e30613]" : ""
+                    path === "/admin" ? "text-[#e30613]" : ""
                   } hover:text-[#e30613] transition-colors`}
                 >
                   Панель администрации
