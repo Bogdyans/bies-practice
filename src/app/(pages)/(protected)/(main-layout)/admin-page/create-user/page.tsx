@@ -13,17 +13,18 @@ import {
 } from "@/components/ui/select";
 import DefaultButton from "@/components/shared/buttons/button";
 import { ImageIcon, X } from "lucide-react";
+import XButton from "@/components/shared/buttons/x-button";
 
 interface FormData {
   login: string;
   password: string;
-  role_id: number;
+  role_id: number | string;
   fio: string;
   email: string;
   phone_number: string;
   job_title: string;
-  otdel_id: number;
-  organization_id: number;
+  otdel_id: number | string;
+  organization_id: number | string;
   location: string;
   pseudonim?: string;
   avatar?: File | null;
@@ -55,13 +56,13 @@ export default function CreateUserPage() {
   const [formData, setFormData] = useState<FormData>({
     login: "",
     password: "",
-    role_id: 0,
+    role_id: "",
     fio: "",
     email: "",
     phone_number: "",
     job_title: "",
-    otdel_id: 0,
-    organization_id: 0,
+    otdel_id: "",
+    organization_id: "",
     location: "",
     pseudonim: "",
     avatar: null,
@@ -112,6 +113,7 @@ export default function CreateUserPage() {
 
   useEffect(() => {
     const fetchDepartments = async () => {
+      if (formData.organization_id == 0) return;
       try {
         const departmentsRes = await fetch(
           `/api/admin/fetch-info/departments?organization_id=${formData.organization_id}`,
@@ -142,10 +144,7 @@ export default function CreateUserPage() {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]:
-        name === "role_id" || name === "otdel_id"
-          ? Number.parseInt(value)
-          : value,
+      [name]: value,
     }));
   };
 
@@ -153,29 +152,35 @@ export default function CreateUserPage() {
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
       setFormData((prev) => ({
-        ...prev, avatar: file,
-      }))
+        ...prev,
+        avatar: file,
+      }));
 
       const previewUrl = URL.createObjectURL(file);
       setAvatarPreview(previewUrl);
     }
-  }
+  };
 
   const triggerFileInput = () => {
     if (fileInputRef.current) {
-      fileInputRef.current.click()
+      fileInputRef.current.click();
     }
-  }
+  };
 
   const removeAvatar = () => {
     if (avatarPreview) {
-      URL.revokeObjectURL(avatarPreview)
+      URL.revokeObjectURL(avatarPreview);
     }
-    setAvatarPreview(null)
+    setAvatarPreview(null);
     setFormData((prev) => ({
-      ...prev, avatar: null,
-    }))
-  }
+      ...prev,
+      avatar: null,
+    }));
+
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -184,13 +189,23 @@ export default function CreateUserPage() {
     setSuccess(false);
 
     try {
-      const formDataToSend = new FormData()
+      const formDataToSend = new FormData();
+
+      const numericFields = {
+        role_id: Number(formData.role_id),
+        otdel_id: Number(formData.otdel_id),
+        organization_id: Number(formData.organization_id),
+      };
 
       Object.entries(formData).forEach(([key, value]) => {
         if (key !== "avatar" && value !== null && value !== undefined) {
-          formDataToSend.append(key, value.toString());
+          const finalValue =
+            key in numericFields
+              ? numericFields[key as keyof typeof numericFields].toString()
+              : value.toString();
+          formDataToSend.append(key, finalValue);
         }
-      })
+      });
 
       if (formData.avatar) {
         formDataToSend.append("avatar", formData.avatar);
@@ -224,7 +239,7 @@ export default function CreateUserPage() {
           avatar: null,
         });
         setTimeout(() => {
-          router.push("/admin-page/create-user");
+          router.push("/admin-page");
         }, 2000);
       } else {
         setError(data.message || "Произошла ошибка при создании пользователя");
@@ -318,12 +333,20 @@ export default function CreateUserPage() {
               </Select>
             </div>
             <div>
-              <label className="block text-sm font-medium mb-2">Аватар пользователя</label>
+              <label className="block text-sm font-medium mb-2">
+                Аватар пользователя
+              </label>
 
-              <input type="file" ref={fileInputRef} onChange={handleAvatarChange} accept="image/*" className="hidden" />
+              <input
+                type="file"
+                ref={fileInputRef}
+                onChange={handleAvatarChange}
+                accept="image/*"
+                className="hidden"
+              />
 
               <div className="flex items-center space-x-4">
-                <div className="relative w-24 h-24 rounded-full overflow-hidden border border-gray-300 bg-white flex items-center justify-center">
+                <div className="relative w-25 h-25 rounded-full overflow-hidden border border-gray-300 bg-white flex items-center justify-center">
                   {avatarPreview ? (
                     <>
                       <Image
@@ -332,26 +355,38 @@ export default function CreateUserPage() {
                         fill
                         className="object-cover"
                       />
-                      <button
+                      {/* <button
                         type="button"
                         onClick={removeAvatar}
                         className="absolute right-[10px] top-[10px] bg-white rounded-full p-1 shadow-md"
                       >
                         <X className="w-3 h-3 text-[#e30613]" />
-                      </button>
+                      </button> */}
+                      <XButton
+                        onClick={removeAvatar}
+                        className="absolute right-[10px] top-[10px] bg-white rounded-full p-1 shadow-md text-[#e30613]"
+                      />
                     </>
                   ) : (
                     <ImageIcon className="w-8 h-8 text-gray-400" />
                   )}
                 </div>
 
-                <button
+                {/* <button
                   type="button"
                   onClick={triggerFileInput}
                   className="py-2 px-4 border border-gray-300 rounded-md flex items-center justify-center gap-2 bg-white"
                 >
                   <span>Загрузить фото</span>
-                </button>
+                </button> */}
+                <div onClick={(e) => e.preventDefault()}>
+                  <DefaultButton
+                    content="Загрузить фото"
+                    bg={"#b6b6b6"}
+                    onClick={triggerFileInput}
+                    className="py-2 px-4 border border-gray-300 rounded-md flex items-center justify-center gap-2"
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -525,7 +560,7 @@ export default function CreateUserPage() {
             />
           </div>
 
-          <div className="pt-2">
+          <div className="pt-2" onClick={(e) => e.preventDefault()}>
             <DefaultButton
               content="Отмена"
               bg={"#b6b6b6"}
