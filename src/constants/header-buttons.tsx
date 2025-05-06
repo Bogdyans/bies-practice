@@ -7,6 +7,10 @@ export const HEADER_BUTTONS_DATA = [
         href: "/",
     },
     {
+        title: "Новости",
+        href: "/news",
+    },
+    {
         title: "Документы",
         href: "/documents",
     },
