@@ -4,8 +4,6 @@ import { useState } from "react"
 import { Input } from "@/components/ui/input"
 import DefaultButton from "@/components/shared/buttons/button";
 import Image from "next/image";
-import {router} from "next/client";
-import {signIn} from "next-auth/react";
 import {useRouter} from "next/navigation";
 
 export default function LoginPage() {

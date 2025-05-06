@@ -1,47 +1,78 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import {BellIcon, MainLogoIcon, SearchIcon} from "@/components/ui/icons";
-import {HEADER_BUTTONS_DATA} from "@/constants/header-buttons";
-import {usePathname} from "next/navigation";
+import Link from "next/link";
+import { BellIcon, MainLogoIcon, SearchIcon } from "@/components/ui/icons";
+import { HEADER_BUTTONS_DATA } from "@/constants/header-buttons";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function HeaderDesktop() {
-    const path = usePathname();
-    console.log(path)
+  const [isUserAdmin, setIsUserAdmin] = useState<Boolean>(false);
 
-    return (
-        <header className="border-b border-[#f5f5f5] bg-white">
-            <div className="container mx-auto px-4 py-4 max-w-7xl">
-                <div className="flex justify-between items-center">
-                    <div className="flex items-center space-x-8">
+  useEffect(() => {
+    const fetchProfileData = async () => {
+      const response = await fetch(`/api/profile/user-role`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
-                        {/* Logo */}
-                        <div className="">
-                            <MainLogoIcon width={"150"}/>
-                        </div>
+      const data: { userRole: string | null } = await response.json();
+      if (data.userRole != null) setIsUserAdmin(true);
+    };
 
-                        {/* Main Navigation */}
-                        <nav className="hidden md:flex space-x-6">
-                            {
-                                HEADER_BUTTONS_DATA.map((button, index) =>
-                                    <Link href={button.href} key={index} className={`font-medium ${path === button.href? "text-[#e30613]" : ""} hover:text-[#e30613] transition-colors`}>
-                                        {button.title}
-                                    </Link>
-                                )
-                            }
-                        </nav>
-                    </div>
+    fetchProfileData();
+  }, []);
 
-                    <div className="flex items-center space-x-4">
-                        <button className="p-2 hover:bg-[#f5f5f5] rounded-full transition-colors">
-                            <SearchIcon width="20px" height="20px"/>
-                        </button>
-                        <button className="p-2 hover:bg-[#f5f5f5] rounded-full transition-colors">
-                            <BellIcon width="20px" height="20px"/>
-                        </button>
-                    </div>
-                </div>
+  const path = usePathname();
+  console.log(path);
+
+  return (
+    <header className="border-b border-[#f5f5f5] bg-white">
+      <div className="container mx-auto px-4 py-4 max-w-7xl">
+        <div className="flex justify-between items-center">
+          <div className="flex items-center space-x-8">
+            {/* Logo */}
+            <div className="">
+              <MainLogoIcon width={"150"} />
             </div>
-        </header>
-    )
+
+            {/* Main Navigation */}
+            <nav className="hidden md:flex space-x-6">
+              {HEADER_BUTTONS_DATA.map((button, index) => (
+                <Link
+                  href={button.href}
+                  key={index}
+                  className={`font-medium ${
+                    path === button.href ? "text-[#e30613]" : ""
+                  } hover:text-[#e30613] transition-colors`}
+                >
+                  {button.title}
+                </Link>
+              ))}
+              {isUserAdmin == true ? 
+                <Link
+                  href={"/admin-page"}
+                  className={`font-medium ${
+                    path === "/admin-page" ? "text-[#e30613]" : ""
+                  } hover:text-[#e30613] transition-colors`}
+                >
+                  Панель администрации
+                </Link>
+              : <></>}
+            </nav>
+          </div>
+
+          <div className="flex items-center space-x-4">
+            <button className="p-2 hover:bg-[#f5f5f5] rounded-full transition-colors">
+              <SearchIcon width="20px" height="20px" />
+            </button>
+            <button className="p-2 hover:bg-[#f5f5f5] rounded-full transition-colors">
+              <BellIcon width="20px" height="20px" />
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+  );
 }

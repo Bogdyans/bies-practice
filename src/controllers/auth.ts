@@ -5,17 +5,17 @@ import Jwt from "@/lib/jwt";
 
 
 export default class AuthController {
-    static async login(username: string, password: string) {
+    static async login(login: string, password: string) {
         const client = await pool.connect();
 
-        if (!username || !password) {
+        if (!login || !password) {
             throw new Error('Username and password are required');
         }
 
         let user;
         try {
             try {
-                user = await UserModel.findByUsername(client, username);
+                user = await UserModel.findByUsername(client, login);
             } catch {
                 throw new Error('Error finding user');
             }

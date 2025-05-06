@@ -15,9 +15,9 @@ export async function GET(request: NextRequest) {
 
 
     try {
-        const news = await NewsController.getNews(decoded.id, limit, offset);
+        const { news, total } = await NewsController.getNews(decoded.id, limit, offset);
 
-        return NextResponse.json({ news }, { status: 200 })
+        return NextResponse.json({ news, total }, { status: 200 })
     } catch {
         return NextResponse.json({ message: "Error getting news"}, { status: 400 });
     }

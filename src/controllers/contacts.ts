@@ -1,5 +1,6 @@
 import ContactsModel from "@/models/contacts";
 import pool from "@/lib/db";
+import UserModel from "@/models/user";
 
 interface getInterface {
     user_id: number;
@@ -10,7 +11,6 @@ interface getInterface {
 
 export default class ContactsController {
 
-
     static async getContacts(params: getInterface) {
         const client = await pool.connect();
 
@@ -20,6 +20,19 @@ export default class ContactsController {
             console.error('Database connection error:', error);
 
             throw Error("Failed to get contacts");
+        } finally {
+            client.release();
+        }
+    }
+
+    static async getContact(id: number) {
+        const client = await pool.connect();
+
+        try {
+            return await UserModel.findByIdProfile(client, id);
+        } catch (error) {
+            console.error('Database connection error:', error);
+            throw Error("Failed to get user");
         } finally {
             client.release();
         }
