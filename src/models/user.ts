@@ -111,5 +111,24 @@ export default class UserModel {
       throw err;
     }
   }
+
+    static async getOrganizationForUser(client: PoolClient, userId: number) {
+        const query = `
+            SELECT org.id as id
+            FROM organizations org
+            JOIN otdels o ON o.organization_id = org.id
+            JOIN user_profiles u ON u.otdel_id = o.id
+            WHERE u.user_id = $1;
+        `;
+
+        try {
+            const orgId = await client.query(query, [userId]);
+
+            return orgId.rows[0].id;
+        } catch (error) {
+            throw error;
+        }
+
+    }
 }
 
