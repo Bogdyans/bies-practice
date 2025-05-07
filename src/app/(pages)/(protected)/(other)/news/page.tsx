@@ -32,7 +32,6 @@ export default function NewsPage() {
 
                 const data = await res.json()
 
-                console.log(data.total)
                 setNews(data.news)
                 setTotalPages(Math.ceil(data.total.total / limit))
             } catch (error) {

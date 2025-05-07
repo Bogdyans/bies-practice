@@ -12,9 +12,8 @@ export async function GET(request: NextRequest,
             return NextResponse.json({ status: 403 });
         }
 
-        const {id} = params;
-
-        console.log(id)
+        const resolvedParams = await params;
+        const id = resolvedParams.id;
 
         const newsData = await NewsController.getNewsById(decoded.id, id);
         return NextResponse.json({ newsData }, { status: 200 })
