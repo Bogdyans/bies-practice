@@ -3,16 +3,7 @@ import pool from "@/lib/db";
 import DocumentModel from "@/models/documents";
 import path from "path";
 import fs from "fs";
-
-export interface Document {
-  id: number;
-  name: string;
-  file_path: string;
-  otdel_id: number | null;
-  uploaded_by: number;
-  uploaded_at: Date;
-  description: string | null;
-}
+import { Document } from "@/types/document";
 
 export default class DocumentController {
   static async fetchDocumentsByOrdelId(

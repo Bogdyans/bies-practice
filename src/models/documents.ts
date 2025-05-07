@@ -1,15 +1,5 @@
 import { PoolClient } from "pg";
-
-export interface Document {
-  id: number;
-  name: string;
-  file_path: string;
-  otdel_id: number | null;
-  uploaded_by: number;
-  uploaded_at: Date;
-  description: string | null;
-  is_archived: boolean;
-}
+import { Document } from "@/types/document";
 
 export default class DocumentModel {
   static async storeDocument(
