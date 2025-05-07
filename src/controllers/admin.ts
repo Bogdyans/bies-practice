@@ -43,7 +43,7 @@ export default class AdminController {
         }
     }
 
-    private static async saveAvatar(avatarFile: File): Promise<String> {
+    private static async saveAvatar(avatarFile: File): Promise<string> {
         try {
             const uploadDir = path.join(process.cwd(), 'public', 'uploads', 'avatars');
             await fs.mkdir(uploadDir, { recursive: true });

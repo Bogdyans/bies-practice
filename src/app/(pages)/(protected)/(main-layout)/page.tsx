@@ -24,8 +24,6 @@ export default function HomePage() {
         setActiveDescription(null)
     }
 
-    console.log(news)
-
     useEffect(() => {
         const fetchNews = async () => {
             try {
