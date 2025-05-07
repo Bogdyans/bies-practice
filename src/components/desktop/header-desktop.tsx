@@ -5,6 +5,7 @@ import { BellIcon, MainLogoIcon, SearchIcon } from "@/components/ui/icons";
 import { HEADER_BUTTONS_DATA } from "@/constants/header-buttons";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import NotificationBell from "@/components/desktop/notification-bell";
 
 export default function HeaderDesktop() {
   const [isUserAdmin, setIsUserAdmin] = useState<boolean>(false);
@@ -66,12 +67,16 @@ export default function HeaderDesktop() {
             <button className="p-2 hover:bg-[#f5f5f5] rounded-full transition-colors">
               <SearchIcon width="20px" height="20px" />
             </button>
-            <button className="p-2 hover:bg-[#f5f5f5] rounded-full transition-colors">
-              <BellIcon width="20px" height="20px" />
-            </button>
+             {/* Контейнер для уведомлений с относительным позиционированием */}
+                        <div className="relative">
+
+                                <NotificationBell />
+
+                        </div>
           </div>
         </div>
       </div>
     </header>
   );
 }
+
