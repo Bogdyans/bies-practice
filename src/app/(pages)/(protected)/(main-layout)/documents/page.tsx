@@ -41,7 +41,7 @@ export default function DocumentsPage() {
                 {documents.map((document) => (
                     <div
                         key={document.id}
-                        className="p-4 w-full bg-white rounded-lg shadow-sm hover:bg-gray-50 cursor-pointer"
+                        className="p-4 mb-2 w-full bg-white rounded-lg shadow-sm hover:bg-gray-50 cursor-pointer"
                         onClick={() => handleDocumentClick(document.id)}
                     >
                         <div className="flex justify-between items-center">
