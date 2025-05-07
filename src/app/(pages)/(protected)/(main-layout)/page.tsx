@@ -24,8 +24,6 @@ export default function HomePage() {
         setActiveDescription(null)
     }
 
-    console.log(news)
-
     useEffect(() => {
         const fetchNews = async () => {
             try {
@@ -102,7 +100,7 @@ export default function HomePage() {
 
                         <div className="space-y-6">
                             {news.map((data) => (
-                                <NewsTitle key={data.news_id} title={data.title} date={data.date} photos={data.photos} />
+                                <NewsTitle key={data.news_id} id={data.news_id} title={data.title} date={data.date} photos={data.photos} />
                             ))}
                             <div className="text-center">
                                 <Link href="/news" className="text-[#e30613] font-medium hover:underline">
@@ -124,12 +122,18 @@ export default function HomePage() {
                     <h2 className="text-xl font-bold mb-4">Новости и анонсы</h2>
 
                     {news.map((data) => (
-                        <NewsTitle key={data.news_id} title={data.title} date={data.date} photos={data.photos} />
+                        <NewsTitle key={data.news_id} id={data.news_id} title={data.title} date={data.date}
+                                   photos={data.photos}/>
                     ))}
+                    <div className="text-center">
+                        <Link href="/news" className="text-[#e30613] font-medium hover:underline">
+                            Все новости →
+                        </Link>
+                    </div>
                 </div>
 
                 {/* Info Tooltip/Modal - Shared between both layouts */}
-                <InfoWindow content={activeDescription} onClose={closeTooltip} />
+                <InfoWindow content={activeDescription} onClose={closeTooltip}/>
             </div>
         </>
     )

@@ -5,7 +5,8 @@ import ContactsController from "@/controllers/contacts";
 export async function GET(request: NextRequest,
                           { params }: { params: { id: number } } ) {
     try {
-        const { id } = params;
+        const resolvedParams = await params;
+        const id = resolvedParams.id;
 
         const contactData = await ContactsController.getContact(id);
 

@@ -27,7 +27,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     useEffect(() => {
         const token = localStorage.getItem("token")
-        console.log(token)
 
         if (!token)
         {

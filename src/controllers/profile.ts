@@ -17,4 +17,19 @@ export default class ProfileController {
             client.release();
         }
     }
+
+    static async getUserRoleById(id: number) {
+        const client = await pool.connect();
+
+        try {
+            const profileData = await UserModel.findById(client, id);
+
+            return profileData.role_id;
+        } catch (error) {
+            console.log(error);
+            throw(error);
+        } finally {
+            client.release();
+        }
+    }
 }

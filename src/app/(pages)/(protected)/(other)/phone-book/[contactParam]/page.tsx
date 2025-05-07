@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useState, useEffect } from 'react';
 import {Contact} from "@/types/contact";
 import {useParams} from "next/navigation";
+import HeaderWithBackButton from "@/components/mobile/header-with-back-button";
 
 export default function ProfilePage() {
   const [profileData, setProfileData] = useState<Contact | null>(null);
@@ -23,7 +24,7 @@ export default function ProfilePage() {
     }
 
     fetchProfileData()
-  }, [])
+  }, [contactParam])
 
   if (!profileData) {
     return <div className="min-h-screen p-4 md:max-w-7xl md:mx-auto"> </div>
@@ -31,7 +32,8 @@ export default function ProfilePage() {
 
   return (
       <div className="min-h-screen p-4 md:max-w-7xl md:mx-auto">
-        <div className="flex justify-between ">
+        <HeaderWithBackButton href="/phone-book" title={profileData.phone_number} className="md:hidden mb-8" />
+        <div className="flex justify-between">
           <div className="space-y-[9px]">
 
             {/* Profile Information */}

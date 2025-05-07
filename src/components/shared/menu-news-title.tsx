@@ -1,10 +1,11 @@
 import Image from "next/image";
 import {useState, useEffect} from "react";
+import Link from "next/link";
 
 export default function NewsTitle(
-        {title, date, photos}
+        {id, title, date, photos}
         :
-        { title: string, date: string, photos: { url: string, caption?: string }[] }
+        { id: number, title: string, date: string, photos: { url: string, caption?: string }[] }
 ) {
     const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
     const [isTouching, setIsTouching] = useState<boolean>(false);
@@ -27,9 +28,13 @@ export default function NewsTitle(
              onTouchCancel={() => setIsTouching(false)}
         >
             <div className="p-4">
-                <h3 className="font-medium mb-1 cursor-pointer">{title}</h3>
+                <Link href={`/news/${id}`}>
+                    <h3 className="font-medium mb-1 cursor-pointer">{title}</h3>
+                </Link>
                 <div className="flex justify-between items-center text-[#a4a4a4] text-sm">
-                    <span className="cursor-pointer hover:text-[#e30613] hover:drop-shadow-md transition-all duration-300">Читать далее</span>
+                    <Link href={`/news/${id}`}>
+                        <span className="cursor-pointer hover:text-[#e30613] hover:drop-shadow-md transition-all duration-300">Читать далее</span>
+                    </Link>
                     <span className="select-none">{date.slice(0, 10)}</span>
                 </div>
             </div>
