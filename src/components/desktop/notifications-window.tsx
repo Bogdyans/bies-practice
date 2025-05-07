@@ -93,7 +93,7 @@ function NotificationsList({
                     }`}
                 >
                     <div className="flex items-start">
-                        {!notification.is_read && <span className="flex-shrink-0 mt-1.5 mr-2 h-2 w-2 rounded-full bg-blue-500" />}
+                        {!notification.is_read && <span className="flex-shrink-0 mt-1.5 mr-2 h-2 w-2 rounded-full bg-[#e30613]" />}
                         <div className="flex-grow">
                             <div className="text-sm font-medium text-gray-900">{notification.title}</div>
                             <div className="text-sm text-gray-500 mt-1 break-words whitespace-normal">{notification.message}</div>
