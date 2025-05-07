@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function HeaderDesktop() {
-  const [isUserAdmin, setIsUserAdmin] = useState<Boolean>(false);
+  const [isUserAdmin, setIsUserAdmin] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchProfileData = async () => {
@@ -25,7 +25,6 @@ export default function HeaderDesktop() {
   }, []);
 
   const path = usePathname();
-  console.log(path);
 
   return (
     <header className="border-b border-[#f5f5f5] bg-white">
@@ -52,9 +51,9 @@ export default function HeaderDesktop() {
               ))}
               {isUserAdmin == true ? 
                 <Link
-                  href={"/admin-page"}
+                  href={"/admin"}
                   className={`font-medium ${
-                    path === "/admin-page" ? "text-[#e30613]" : ""
+                    path === "/admin" ? "text-[#e30613]" : ""
                   } hover:text-[#e30613] transition-colors`}
                 >
                   Панель администрации

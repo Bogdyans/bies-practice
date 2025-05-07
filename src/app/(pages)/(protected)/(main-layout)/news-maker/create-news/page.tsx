@@ -1,6 +1,6 @@
 "use client";
 
-import { AlertCircle, Check, ImageIcon, Plus, X } from "lucide-react";
+import { AlertCircle, Check } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import Image from "next/image";
@@ -101,7 +101,7 @@ export default function CreateNewsPage() {
         setImagePreviews([]);
 
         setTimeout(() => {
-          router.push("/admin-page");
+          router.push("/");
         }, 2000);
       } else {
         const data = await response.json();
@@ -245,7 +245,7 @@ export default function CreateNewsPage() {
             <DefaultButton
               content="Отмена"
               bg={"#b6b6b6"}
-              onClick={() => router.push("/admin-page")}
+              onClick={() => router.push("/")}
               className="block w-full py-4 rounded-md font-medium text-center"
             />
           </div>

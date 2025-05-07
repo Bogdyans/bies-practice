@@ -11,15 +11,17 @@ import DefaultButton from "@/components/shared/buttons/button";
 import Image from "next/image"
 import InfoWindow from "@/components/shared/info-window";
 import {AnswererData} from "@/types/contact";
+import Loading from "@/components/shared/loading";
 
 
 export default function AskPage() {
     const {serviceParam} = useParams()
+
     const [questionValue, setQuestionValue] = useState<string>("");
     const [activeDescription, setActiveDescription] = useState<string | null>(null)
     const [answererData, setAnswererData] = useState<AnswererData | null>(null);
 
-    useEffect(() => {
+    useEffect( () => {
         const fetchAnswererData = async () => {
             const result = await fetch(`/api/questions/answerer/${serviceParam}`, {
                 headers: {
@@ -27,15 +29,12 @@ export default function AskPage() {
                 }
             });
 
-            if (!result.ok) return;
-
             const data = await result.json();
-            console.log(data)
             setAnswererData(data.answerer_data);
         }
 
         fetchAnswererData()
-    }, []);
+    }, [serviceParam]);
 
     if (!serviceParam) {
         return <NotFound/>
@@ -93,9 +92,11 @@ export default function AskPage() {
                     <h2 className="text-xl font-bold mb-3 lg:mb-4">Ответственное лицо:</h2>
 
                     {/* Mobile Layout */}
-                    {
-                        answererData && (
-                            <div className="lg:hidden flex justify-between">
+
+                            <div className="md:hidden flex justify-between">
+                                {
+                                    answererData? (
+                                        <>
                                 <div className="space-y-3">
                                     <div className="flex items-center">
                                         <UserIcon className="w-5 h-5 text-[#e30613] mr-2" />
@@ -119,13 +120,17 @@ export default function AskPage() {
                                         className="w-full h-full object-cover"
                                     />
                                 </div>
+                                        </>
+                                    ) : <Loading/>}
                             </div>
-                    )}
+
 
                     {/* Desktop Layout */}
-                    {
-                        answererData && (
+
                     <div className="hidden lg:block">
+                        {
+                            answererData? (
+                                <>
                         <div className="flex flex-col items-center mb-6">
                             <div className="w-40 h-48 bg-gray-200 rounded-md overflow-hidden mb-4">
                                 <Image
@@ -151,8 +156,10 @@ export default function AskPage() {
                                 <span className="text-base">{answererData.email}</span>
                             </div>
                         </div>
+                                </>
+                            ) : <Loading/>}
                     </div>
-                        )}
+
                 </div>
 
 
