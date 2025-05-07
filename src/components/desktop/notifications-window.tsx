@@ -42,15 +42,15 @@ export default function NotificationsWindow({
         >
             <div className="p-4 border-b border-gray-200">
                 <h3 id="notifications-title" className="font-semibold text-lg">
-                    Notifications
+                    Уведомления
                 </h3>
             </div>
 
             <Tabs defaultValue="all" value={activeTab} onValueChange={setActiveTab} className="w-full">
                 <div className="px-2 pt-2">
                     <TabsList className="grid grid-cols-2 w-full">
-                        <TabsTrigger value="all">All</TabsTrigger>
-                        <TabsTrigger value="unread">Unread ({unreadCount})</TabsTrigger>
+                        <TabsTrigger value="all">Все</TabsTrigger>
+                        <TabsTrigger value="unread">Новые ({unreadCount})</TabsTrigger>
                     </TabsList>
                 </div>
 
@@ -64,7 +64,7 @@ export default function NotificationsWindow({
             </Tabs>
 
             <div className="p-2 text-center border-t border-gray-200">
-                <button className="text-sm text-blue-600 hover:text-blue-800">Show all</button>
+
             </div>
         </div>
     )
@@ -96,7 +96,7 @@ function NotificationsList({
                         {!notification.is_read && <span className="flex-shrink-0 mt-1.5 mr-2 h-2 w-2 rounded-full bg-blue-500" />}
                         <div className="flex-grow">
                             <div className="text-sm font-medium text-gray-900">{notification.title}</div>
-                            <div className="text-sm text-gray-500 mt-1">{notification.message}</div>
+                            <div className="text-sm text-gray-500 mt-1 break-words whitespace-normal">{notification.message}</div>
                             <div className="text-xs text-gray-400 mt-2">{formatTimeAgo(notification.time)}</div>
                         </div>
                         <div className="flex flex-shrink-0 ml-2 space-x-1">

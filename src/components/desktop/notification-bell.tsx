@@ -1,29 +1,24 @@
 "use client"
 
 import {useEffect, useState} from "react"
-import { Bell } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import NotificationsWindow from "./notifications-window"
 import type { NotificationType } from "@/types/notifications"
+import {deleteNotification, fetchNotifications, markAsRead} from "@/utils/fetch/notifications";
+import {BellIcon} from "@/components/ui/icons";
 
 export default function NotificationBell() {
     const [isNotificationsOpen, setIsNotificationsOpen] = useState(false)
     const [notifications, setNotifications] = useState<NotificationType[]>([])
 
     useEffect(() => {
-        const fetchNotifications = async () => {
-            const response = await fetch('/api/notifications', {
-                headers: {
-                    "Content-Type": "application/json",
-                }
-            })
-
-            const data = await response.json();
-            setNotifications(data.notifications);
+        const fetch = async () => {
+            const notifications = await fetchNotifications();
+            setNotifications(notifications);
         }
 
-        fetchNotifications()
-    })
+        fetch()
+    }, [])
 
     const unreadCount = notifications.filter((n) => !n.is_read).length
 
@@ -31,14 +26,26 @@ export default function NotificationBell() {
         setIsNotificationsOpen(!isNotificationsOpen)
     }
 
-    const handleMarkAsRead = (id: number) => {
-        setNotifications(
-            notifications.map((notification) => (notification.id === id ? { ...notification, read: true } : notification)),
-        )
+    const handleMarkAsRead = async (id: number) => {
+        const success = await markAsRead(id);
+
+        if (success) {
+            setNotifications(
+                notifications.map((notification) => (notification.id === id ? { ...notification, is_read: true } : notification)),
+            )
+        } else {
+            console.error("Could not change notification status")
+        }
     }
 
-    const handleDelete = (id: number) => {
-        setNotifications(notifications.filter((notification) => notification.id !== id))
+    const handleDelete = async (id: number) => {
+        const success = await deleteNotification(id);
+
+        if (success) {
+            setNotifications(notifications.filter((notification) => notification.id !== id))
+        } else {
+            console.error("Could not delete notification")
+        }
     }
 
     const handleClose = () => {
@@ -53,7 +60,7 @@ export default function NotificationBell() {
                 onClick={toggleNotifications}
                 aria-label={`Notifications ${unreadCount > 0 ? `(${unreadCount} unread)` : ""}`}
             >
-                <Bell className="h-5 w-5" />
+                <BellIcon width={"100%"} height={"100%"} />
                 {unreadCount > 0 && (
                     <span className="absolute -top-1 -right-1 h-4 w-4 flex items-center justify-center rounded-full bg-red-500 text-white text-xs">
             {unreadCount}
