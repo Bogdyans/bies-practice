@@ -3,6 +3,7 @@ import QuestionModel from "@/models/question";
 import AnswersModel from "@/models/answers";
 import QuestionsModel from "@/models/question";
 import ThemesModel from "@/models/themes";
+import UserModel from "@/models/user";
 
 
 export default class QuestionController {
@@ -40,7 +41,9 @@ export default class QuestionController {
         const client = await pool.connect();
 
         try {
-            const data = await ThemesModel.getAnswererData(client, userId, themeName);
+            const orgId = await UserModel.getOrganizationForUser(client, userId);
+            const data = await ThemesModel.getAnswererData(client, orgId, themeName);
+
             return data;
         } catch (error) {
             console.log("Hiii", error);

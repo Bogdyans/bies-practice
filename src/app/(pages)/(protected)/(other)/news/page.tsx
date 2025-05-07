@@ -63,7 +63,7 @@ export default function NewsPage() {
                     {/* Grid layout: 1 column on mobile, 2 on small tablets, 3 on larger screens */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 px-4 md:px-0">
                         {news.map((item) => (
-                            <NewsTitle key={item.news_id} title={item.title} date={item.date} photos={item.photos} />
+                            <NewsTitle key={item.news_id} id={item.news_id} title={item.title} date={item.date} photos={item.photos} />
                         ))}
                     </div>
 
@@ -116,7 +116,7 @@ function Pagination({ currentPage, totalPages, onPageChange }: PaginationProps) 
     }
 
     return (
-        <div className="flex justify-center items-center gap-2 mt-8 px-4 md:px-0">
+        <div className="flex justify-center items-center gap-2 mt-8 mb-10 px-4 md:px-0">
             <button
                 onClick={() => onPageChange(currentPage - 1)}
                 disabled={currentPage === 1}
