@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import DocumentController from "@/controllers/documents";
 import fs from "fs";
 import Jwt from "@/lib/jwt";
+import path from "path";
 
 export async function GET(
   request: NextRequest,
@@ -35,13 +36,31 @@ export async function GET(
     }
 
     const fileData = fs.readFileSync(document.file_path);
+    const fileExt = path.extname(document.name).toLowerCase();
+    const isPdf = fileExt === ".pdf";
+
+    const mimeTypes: Record<string, string> = {
+      ".pdf": "application/pdf",
+      ".jpg": "image/jpeg",
+      ".jpeg": "image/jpeg",
+      ".png": "image/png",
+      ".gif": "image/gif",
+      ".txt": "text/plain",
+      ".zip": "application/zip",
+      ".rar": "application/x-rar-compressed",
+      ".7z": "application/x-7z-compressed",
+    };
+
+    const contentType = mimeTypes[fileExt] || "application/octet-stream";
+
+    const contentDisposition = isPdf
+      ? `inline; filename="${encodeURIComponent(document.name)}`
+      : `attachment; filename="${encodeURIComponent(document.name)}"`;
 
     return new NextResponse(fileData, {
       headers: {
-        "Content-Type": "application/pdf",
-        "Content-Disposition": `inline; filename="${encodeURIComponent(
-          document.name
-        )}"`,
+        "Content-Type": contentType,
+        "Content-Disposition": contentDisposition,
         "X-Document-Name": encodeURIComponent(document.name),
       },
     });
