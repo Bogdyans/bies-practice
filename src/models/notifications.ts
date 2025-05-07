@@ -4,7 +4,7 @@ import {PoolClient} from "pg";
 export default class NotificationsModel {
   static async findAllForUser(client: PoolClient, userId: number) {
     const query = `
-        SELECT id, title, message, is_read 
+        SELECT id, title, message, is_read, created_at as time
         FROM notifications
         WHERE user_id = $1    
     `;
