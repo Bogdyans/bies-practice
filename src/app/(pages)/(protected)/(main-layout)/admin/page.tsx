@@ -19,6 +19,11 @@ export default function AdminPage() {
                     title={"Панель создания пользователей"}
                     Icon={ArrowIcon}
                 />
+                <ContactButton
+                    href={"/admin/upload-file"}
+                    title={"Панель добавления документов"}
+                    Icon={ArrowIcon}
+                />
             </div>
         </div>
     );
