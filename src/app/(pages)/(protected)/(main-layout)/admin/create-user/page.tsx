@@ -355,13 +355,6 @@ export default function CreateUserPage() {
                         fill
                         className="object-cover"
                       />
-                      {/* <button
-                        type="button"
-                        onClick={removeAvatar}
-                        className="absolute right-[10px] top-[10px] bg-white rounded-full p-1 shadow-md"
-                      >
-                        <X className="w-3 h-3 text-[#e30613]" />
-                      </button> */}
                       <XButton
                         onClick={removeAvatar}
                         className="absolute right-[10px] top-[10px] bg-white rounded-full p-1 shadow-md text-[#e30613]"
@@ -371,14 +364,6 @@ export default function CreateUserPage() {
                     <ImageIcon className="w-8 h-8 text-gray-400" />
                   )}
                 </div>
-
-                {/* <button
-                  type="button"
-                  onClick={triggerFileInput}
-                  className="py-2 px-4 border border-gray-300 rounded-md flex items-center justify-center gap-2 bg-white"
-                >
-                  <span>Загрузить фото</span>
-                </button> */}
                 <div onClick={(e) => e.preventDefault()}>
                   <DefaultButton
                     content="Загрузить фото"
