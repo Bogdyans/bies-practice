@@ -2,7 +2,7 @@ import pool from "@/lib/db";
 
 import DocumentModel from "@/models/documents";
 import path from "path";
-import fs from "fs";
+import fs from "fs/promises";
 import { Document } from "@/types/document";
 
 export default class DocumentController {
@@ -46,13 +46,13 @@ export default class DocumentController {
         "uploads",
         "documents"
       );
-      if (!fs.existsSync(uploadDir)) {
-        fs.mkdirSync(uploadDir, { recursive: true });
-      }
+      await fs.mkdir(uploadDir, { recursive: true });
 
-      const fileName = `${Date.now()}-${name.replace(/\s+/g, "_")}`;
+      const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+      const ext = name.split(".").pop();
+      const fileName = `document-${uniqueSuffix}.${ext}`;
       const filePath = path.join(uploadDir, fileName);
-      fs.writeFileSync(filePath, file);
+      await fs.writeFile(filePath, file);
 
       const isArchive = this.checkIfArchive(fileName);
 

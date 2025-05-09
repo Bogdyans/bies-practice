@@ -39,11 +39,7 @@ export default function DocumentsPage() {
             </div>
             <div className="py-4 flex justify-center flex-col items-center">
                 {documents.map((document) => (
-                    <div
-                        key={document.id}
-                        className="p-4 mb-2 w-full bg-white rounded-lg shadow-sm hover:bg-gray-50 cursor-pointer"
-                        onClick={() => handleDocumentClick(document.id)}
-                    >
+                    <a key={document.id} href={`/api/documents/${document.id}`} download className="p-4 mb-2 w-full bg-white rounded-lg shadow-sm hover:bg-gray-50 cursor-pointer">
                         <div className="flex justify-between items-center">
                             <div>
                                 <h3 className="font-medium text-black">{document.name}</h3>
@@ -56,7 +52,7 @@ export default function DocumentsPage() {
                             </div>
                             <ArrowIcon className="h-5 w-5 text-gray-400" />
                         </div>
-                    </div>
+                    </a>
                 ))}
             </div>
         </div>
