@@ -74,7 +74,7 @@ export default class UserModel {
     }
   }
 
-  static async createUserWithProfile(client: PoolClient, data: NewUserData & { photoUrl?: string }) {
+  static async createUserWithProfile(client: PoolClient, data: NewUserData & { photoUrl: String }) {
     try {
       const hashedPassword = await bcrypt.hash(data.password, 10);
 
