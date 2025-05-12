@@ -4,6 +4,8 @@ import AnswersModel from "@/models/answers";
 import QuestionsModel from "@/models/question";
 import ThemesModel from "@/models/themes";
 import UserModel from "@/models/user";
+import AdminController from "@/controllers/admin";
+import {AnswerersModel} from "@/models/answerers";
 
 
 export default class QuestionController {
@@ -37,7 +39,7 @@ export default class QuestionController {
         }
     }
 
-    static async getAnswererData(userId: number, themeName: string){
+    static async getAnswererData(userId: number, themeName: string) {
         const client = await pool.connect();
 
         try {
@@ -52,4 +54,28 @@ export default class QuestionController {
             client.release();
         }
     }
+
+    static async getQuestions(userId: number, orgId: number, status: string) {
+        const client = await pool.connect();
+
+        try {
+            let questions;
+            const profileData = await UserModel.findById(client, userId);
+
+            if (profileData.role_id == 1) {
+                questions = await QuestionsModel.findByStatusAndOrganization(client, status, orgId)
+            } else {
+                const themes = await AnswerersModel.getResponsobilitiesForUser(client, userId);
+                const themesN = themes.map((theme) => parseInt(theme.question_theme_id, 10));
+                questions = await QuestionsModel.findByThemesAnsStatus(client, themesN, orgId, status);
+            }
+            return questions;
+        } catch (error) {
+            console.log(error);
+            throw error;
+        } finally {
+            client.release()
+        }
+    }
 }
+

@@ -16,7 +16,7 @@ export default class NewsController {
             const newsData = await NewsModel.findNewsById(client, news_id);
 
 
-            if (newsData.organization_id !== org_id) {
+            if (newsData.organization_id != org_id.id) {
                 throw new Error('This news is not for you');
             }
 

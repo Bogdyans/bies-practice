@@ -37,4 +37,74 @@ export default class QuestionsModel {
             throw error
         }
     }
+
+    static async findByStatusAndOrganization(client: PoolClient, status: string, orgId: number) {
+        let query = `
+        SELECT q.*
+        FROM questions q
+        JOIN user_profiles u ON q.user_id = u.user_id
+        JOIN otdels o ON u.otdel_id = o.id
+    `;
+
+        const conditions: string[] = [];
+        const values: any[] = [];
+
+        if (status !== 'all') {
+            values.push(status);
+            conditions.push(`q.status = $${values.length}`);
+        }
+
+        if (orgId !== 0) {
+            values.push(orgId);
+            conditions.push(`o.organization_id = $${values.length}`);
+        }
+
+        if (conditions.length > 0) {
+            query += ` WHERE ` + conditions.join(' AND ');
+        }
+        try {
+            const result = await client.query(query, values);
+            return result.rows;
+        } catch (error) {
+            console.log(error)
+            throw error
+        }
+    }
+
+    static async findByThemesAnsStatus(client: PoolClient, themes: number[], orgId: number, status: string) {
+        let query = `
+        SELECT q.*
+        FROM questions q
+        JOIN user_profiles u ON q.user_id = u.user_id
+        JOIN otdels o ON u.otdel_id = o.id
+    `;
+
+        const conditions: string[] = [];
+        const values: any[] = [];
+
+        // Фильтр по статусу
+        if (status !== 'all') {
+            values.push(status);
+            conditions.push(`q.status = $${values.length}`);
+        }
+
+        // Фильтр по организации
+        if (orgId !== 0) {
+            values.push(orgId);
+            conditions.push(`o.organization_id = $${values.length}`);
+        }
+
+        // Фильтр по темам
+        if (themes.length > 0) {
+            values.push(themes);
+            conditions.push(`q.theme_id = ANY($${values.length})`);
+        }
+
+        if (conditions.length > 0) {
+            query += ` WHERE ` + conditions.join(' AND ');
+        }
+
+        const result = await client.query(query, values);
+        return result.rows;
+    }
 }

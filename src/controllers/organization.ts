@@ -1,5 +1,6 @@
 import pool from "@/lib/db";
 import OrganizationModel from "@/models/organization";
+import UserModel from "@/models/user";
 
 export default class OrganizationController {
     static async getOrganizations() {
@@ -8,6 +9,24 @@ export default class OrganizationController {
         try {
             const organizationsData = await OrganizationModel.fetchOrganizations(client);
             return organizationsData;
+        } catch (error) {
+            console.log(error);
+            throw error;
+        } finally {
+            client.release();
+        }
+    }
+
+    static async getOrganizationsForUserWithRole(userId: number) {
+        const client = await pool.connect();
+        try {
+            const profileData = await UserModel.findById(client, userId);
+
+            if (profileData.role_id == 1) {
+                return await OrganizationModel.fetchOrganizations(client);
+            } else {
+                return [await UserModel.getOrganizationForUser(client, userId)];
+            }
         } catch (error) {
             console.log(error);
             throw error;
