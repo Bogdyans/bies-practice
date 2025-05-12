@@ -20,6 +20,21 @@ export default function AdminPage() {
                     Icon={ArrowIcon}
                 />
                 <ContactButton
+                    href={"/admin/upload-file"}
+                    title={"Панель добавления документов"}
+                    Icon={ArrowIcon}
+                />
+                <ContactButton
+                    href={"/admin/create-organization"}
+                    title={"Панель добавления организации"}
+                    Icon={ArrowIcon}
+                />
+                <ContactButton
+                    href={"/admin/create-department"}
+                    title={"Панель добавления отдела"}
+                    Icon={ArrowIcon}
+                />
+                <ContactButton     
                     href={"/admin/answerers"}
                     title={"Назначить ответственных на вопросы"}
                     Icon={ArrowIcon}
