@@ -15,4 +15,18 @@ export default class OrganizationController {
             client.release();
         }
     }
+
+    static async findAllUsers(organizationId: number) {
+        const client = await pool.connect();
+
+        try {
+            const users = await OrganizationModel.findAllUsers(client, organizationId);
+            return users;
+        } catch (error) {
+            console.log(error);
+            throw error;
+        } finally {
+            client.release();
+        }
+    }
 }

@@ -19,6 +19,11 @@ export default function AdminPage() {
                     title={"Панель создания пользователей"}
                     Icon={ArrowIcon}
                 />
+                <ContactButton
+                    href={"/admin/answerers"}
+                    title={"Назначить ответственных на вопросы"}
+                    Icon={ArrowIcon}
+                />
             </div>
         </div>
     );
