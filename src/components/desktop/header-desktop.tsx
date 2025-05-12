@@ -1,14 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import { BellIcon, MainLogoIcon, SearchIcon } from "@/components/ui/icons";
+import { MainLogoIcon, SearchIcon } from "@/components/ui/icons";
 import { HEADER_BUTTONS_DATA } from "@/constants/header-buttons";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import NotificationBell from "@/components/desktop/notification-bell";
 
+
+
 export default function HeaderDesktop() {
-  const [isUserAdmin, setIsUserAdmin] = useState<boolean>(false);
+  const [userInfo, setUserInfo] = useState<{isAdmin: boolean; isAnswerer: boolean}>({isAdmin: false, isAnswerer: false});
 
   useEffect(() => {
     const fetchProfileData = async () => {
@@ -18,8 +20,8 @@ export default function HeaderDesktop() {
         },
       });
 
-      const data: { userRole: string | null } = await response.json();
-      if (data.userRole != null) setIsUserAdmin(true);
+      const data: { userRole: string | null, isResponsible: string | null } = await response.json();
+      setUserInfo({ isAdmin: !!data.userRole, isAnswerer: !!data.isResponsible });
     };
 
     fetchProfileData();
@@ -50,7 +52,7 @@ export default function HeaderDesktop() {
                   {button.title}
                 </Link>
               ))}
-              {isUserAdmin == true ? 
+              {userInfo.isAdmin ?
                 <Link
                   href={"/admin"}
                   className={`font-medium ${
@@ -60,6 +62,16 @@ export default function HeaderDesktop() {
                   Панель администрации
                 </Link>
               : <></>}
+              {!userInfo.isAdmin && userInfo.isAnswerer ?
+                  <Link
+                      href={"/questions"}
+                      className={`font-medium ${
+                          path === "/questions" ? "text-[#e30613]" : ""
+                      } hover:text-[#e30613] transition-colors`}
+                  >
+                    Вопросы
+                  </Link>
+                  : <></>}
             </nav>
           </div>
 
@@ -69,9 +81,7 @@ export default function HeaderDesktop() {
             </button>
              {/* Контейнер для уведомлений с относительным позиционированием */}
                         <div className="relative">
-
-                                <NotificationBell />
-
+                          <NotificationBell />
                         </div>
           </div>
         </div>
