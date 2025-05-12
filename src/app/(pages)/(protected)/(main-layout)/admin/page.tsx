@@ -24,6 +24,16 @@ export default function AdminPage() {
                     title={"Панель добавления документов"}
                     Icon={ArrowIcon}
                 />
+                <ContactButton
+                    href={"/admin/create-organization"}
+                    title={"Панель добавления организации"}
+                    Icon={ArrowIcon}
+                />
+                <ContactButton
+                    href={"/admin/create-department"}
+                    title={"Панель добавления отдела"}
+                    Icon={ArrowIcon}
+                />
             </div>
         </div>
     );
