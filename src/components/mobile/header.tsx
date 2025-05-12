@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from "react"
 import Image from "next/image"
 import XButton from "@/components/shared/buttons/x-button";
 import { SearchIcon, BellIcon, MainLogoIcon } from "@/components/ui/icons";
+import Link from "next/link";
 
 export default function Header() {
     const [isSearchOpen, setIsSearchOpen] = useState(false)
@@ -72,7 +73,7 @@ export default function Header() {
                 }`}
             >
                 {/* <Image src="/media/icons/notifications.png" alt="notifications" width={33} height={33} /> */}
-                <BellIcon width={"100%"} height={"100%"} />
+                <Link href='/notifications'><BellIcon width={"100%"} height={"100%"} /></Link>
             </div>
 
             {/* Search Input */}

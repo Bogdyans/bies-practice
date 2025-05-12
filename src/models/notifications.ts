@@ -4,7 +4,7 @@ import {PoolClient} from "pg";
 export default class NotificationsModel {
   static async findAllForUser(client: PoolClient, userId: number) {
     const query = `
-        SELECT id, title, message, is_read 
+        SELECT id, title, message, is_read, created_at as time
         FROM notifications
         WHERE user_id = $1    
     `;
@@ -68,7 +68,7 @@ export default class NotificationsModel {
   }
 
   static async delete(client: PoolClient, id: number) {
-    const query = `DELETE FROM "notification" WHERE id = $1`
+    const query = `DELETE FROM notifications WHERE id = $1`
     const params = [id];
 
     try {

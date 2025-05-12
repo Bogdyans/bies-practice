@@ -1,7 +1,8 @@
 import UserModel from "@/models/user";
 import pool from "@/lib/db";
 import path from "path";
-import fs from "fs/promises";
+import fs from 'fs/promises';
+import {AnswerersModel} from "@/models/answerers";
 
 export interface NewUserData {
   login: string;
@@ -71,5 +72,22 @@ export default class AdminController {
       console.error("Ошибка при сохранении аватарки: ", error);
       throw new Error("Failed to save avatar");
     }
+  }
+
+  static async setAnswerer(orgId: number, themeId: number, userId: number) {
+      const client = await pool.connect()
+
+      try {
+          await client.query('BEGIN')
+          await AnswerersModel.deleteAnswerer(client, themeId, orgId);
+          await AnswerersModel.setAnswerer(client, orgId, themeId, userId);
+          await client.query("COMMIT");
+      } catch (error) {
+          await client.query("ROLLBACK");
+          console.log(error);
+          throw error;
+      } finally {
+          client.release();
+      }
   }
 }
