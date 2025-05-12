@@ -40,7 +40,7 @@ export default class QuestionsModel {
 
     static async findByStatusAndOrganization(client: PoolClient, status: string, orgId: number) {
         let query = `
-        SELECT q.*
+        SELECT q.*, u.fio
         FROM questions q
         JOIN user_profiles u ON q.user_id = u.user_id
         JOIN otdels o ON u.otdel_id = o.id
@@ -73,7 +73,7 @@ export default class QuestionsModel {
 
     static async findByThemesAnsStatus(client: PoolClient, themes: number[], orgId: number, status: string) {
         let query = `
-        SELECT q.*
+        SELECT q.*, u.fio
         FROM questions q
         JOIN user_profiles u ON q.user_id = u.user_id
         JOIN otdels o ON u.otdel_id = o.id
@@ -106,5 +106,20 @@ export default class QuestionsModel {
 
         const result = await client.query(query, values);
         return result.rows;
+    }
+
+    static async getUserId(client: PoolClient, qId: number) {
+        const query = `
+            SELECT user_id, text
+            FROM questions
+            WHERE id = $1;
+        `
+        try {
+            const result = await client.query(query, [qId])
+            return result.rows[0];
+        } catch (e)
+        {
+            throw e;
+        }
     }
 }

@@ -4,8 +4,8 @@ import AnswersModel from "@/models/answers";
 import QuestionsModel from "@/models/question";
 import ThemesModel from "@/models/themes";
 import UserModel from "@/models/user";
-import AdminController from "@/controllers/admin";
 import {AnswerersModel} from "@/models/answerers";
+import NotificationsModel from "@/models/notifications";
 
 
 export default class QuestionController {
@@ -28,6 +28,9 @@ export default class QuestionController {
 
             await AnswersModel.createNewAnswer(client, text, questionId)
             await QuestionsModel.changeStatusForQuestion(client, questionId, 'answered')
+            const questionDataForNotification = await QuestionModel.getUserId(client, questionId)
+            console.log(questionDataForNotification)
+            await NotificationsModel.createNewNotification(client, questionDataForNotification.user_id, `Вы получил ответ на ваш вопрос`, `${questionDataForNotification.text}: ${text}`)
 
             await client.query("COMMIT");
         } catch (error) {

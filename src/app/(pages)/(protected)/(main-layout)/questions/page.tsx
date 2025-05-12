@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { Check, Clock, X } from "lucide-react"
 import Loading from "@/components/shared/loading";
+import {toast} from "sonner";
 
 
 export default function AnswersPage() {
@@ -71,6 +72,7 @@ export default function AnswersPage() {
             if (response.ok) {
                 // Refresh questions after answering
                 fetchQuestions()
+                toast.success("Ответ отправлен")
             }
         } catch (error) {
             console.error("Error submitting answer:", error)
@@ -197,7 +199,7 @@ function QuestionCard({ question, onAnswerSubmit, getStatusIcon }) {
                         {getStatusIcon(question.status)}
                         <div>
                             <div className="flex items-center space-x-2">
-                                <h3 className="text-lg font-medium text-gray-900">{question.user_profile?.fio || "Пользователь"}</h3>
+                                <h3 className="text-lg font-medium text-gray-900">{question.fio || "Пользователь"}</h3>
                                 <span className="text-sm text-gray-500">{question.user_profile?.job_title}</span>
                             </div>
                             <div className="mt-1 flex items-center space-x-2 text-sm text-gray-500">
