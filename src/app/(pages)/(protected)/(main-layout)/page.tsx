@@ -1,6 +1,6 @@
 "use client"
 
-import {useEffect, useState} from "react"
+import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 
@@ -9,7 +9,7 @@ import InfoWindow from "@/components/shared/info-window"
 import MenuServiceButton from "@/components/shared/menu-service-button"
 import NewsTitle from "@/components/shared/menu-news-title"
 import DefaultButton from "@/components/shared/buttons/button"
-import {News} from "@/types/news";
+import { News } from "@/types/news";
 
 export default function HomePage() {
     const router = useRouter()
@@ -89,7 +89,7 @@ export default function HomePage() {
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
-                            <DefaultButton content={"Гид нового сотрудника"} bg={"#e30613"} onClick={() => router.push("/guide")} />
+                            <DefaultButton content={"Гид нового сотрудника"} bg={"#e30613"} onClick={() => window.open('/uploads/gid/gid.pdf', '_blank')} />
                             <DefaultButton content={"Мне только спросить!"} bg={"#b6b6b6"} onClick={() => router.push("/ask")} />
                         </div>
                     </div>
@@ -113,7 +113,7 @@ export default function HomePage() {
 
                 {/* Mobile Action Buttons - Only visible on small screens */}
                 <div className="px-4 space-y-3 mb-6 md:hidden">
-                    <DefaultButton content={"Гид нового сотрудника"} bg={"#e30613"} onClick={() => router.push("/guide")} />
+                    <DefaultButton content={"Гид нового сотрудника"} bg={"#e30613"} onClick={() => window.open('/uploads/gid/gid.pdf', '_blank')} />
                     <DefaultButton content={"Мне только спросить!"} bg={"#b6b6b6"} onClick={() => router.push("/ask")} />
                 </div>
 
@@ -123,7 +123,7 @@ export default function HomePage() {
 
                     {news.map((data) => (
                         <NewsTitle key={data.news_id} id={data.news_id} title={data.title} date={data.date}
-                                   photos={data.photos}/>
+                            photos={data.photos} />
                     ))}
                     <div className="text-center">
                         <Link href="/news" className="text-[#e30613] font-medium hover:underline">
@@ -133,7 +133,7 @@ export default function HomePage() {
                 </div>
 
                 {/* Info Tooltip/Modal - Shared between both layouts */}
-                <InfoWindow content={activeDescription} onClose={closeTooltip}/>
+                <InfoWindow content={activeDescription} onClose={closeTooltip} />
             </div>
         </>
     )

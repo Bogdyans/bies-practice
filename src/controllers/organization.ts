@@ -3,19 +3,38 @@ import OrganizationModel from "@/models/organization";
 import UserModel from "@/models/user";
 
 export default class OrganizationController {
-    static async getOrganizations() {
-        const client = await pool.connect();
+  static async getOrganizations() {
+    const client = await pool.connect();
 
-        try {
-            const organizationsData = await OrganizationModel.fetchOrganizations(client);
-            return organizationsData;
-        } catch (error) {
-            console.log(error);
-            throw error;
-        } finally {
-            client.release();
-        }
+    try {
+      const organizationsData = await OrganizationModel.fetchOrganizations(
+        client
+      );
+      return organizationsData;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    } finally {
+      client.release();
     }
+  }
+
+  static async createOrganization(name: string) {
+    const client = await pool.connect();
+
+    try {
+      const organizationData = await OrganizationModel.createOrganization(
+        client,
+        name
+      );
+      return organizationData;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    } finally {
+      client.release();
+    }
+  }
 
     static async getOrganizationsForUserWithRole(userId: number) {
         const client = await pool.connect();
