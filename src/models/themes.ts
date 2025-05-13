@@ -1,7 +1,7 @@
 import {PoolClient} from "pg";
 
 export default class ThemesModel {
-    static async getAnswererData(client: PoolClient, organizationId: number, themeName: string) {
+    static async getAnswererData(client: PoolClient, organizationId: {id: number}, themeName: string) {
         const query = `
             SELECT
                 up.fio, up.photo_url, up.job_title, up.email
