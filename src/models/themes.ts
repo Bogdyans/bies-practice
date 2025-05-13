@@ -1,6 +1,4 @@
 import {PoolClient} from "pg";
-import {error} from "next/dist/build/output/log";
-
 
 export default class ThemesModel {
     static async getAnswererData(client: PoolClient, organizationId: number, themeName: string) {
@@ -14,10 +12,11 @@ export default class ThemesModel {
         `;
 
         try {
-            const result = await client.query(query, [themeName, organizationId]);
+            const result = await client.query(query, [themeName, organizationId.id]);
 
             return result.rows[0];
-        } catch  {
+        } catch (error)  {
+
             throw error;
         }
     }

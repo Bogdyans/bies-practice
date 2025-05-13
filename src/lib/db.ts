@@ -2,6 +2,12 @@
 import { Pool } from 'pg';
 
 // Настройка подключения к базе данных
+// const pool = new Pool({
+//     connectionString: process.env.DATABASE_URL,
+// });
+
+
+// Настройка подключения к базе данных
 const pool = new Pool({
     user: process.env.DB_USER,
     host: process.env.DB_HOST,
