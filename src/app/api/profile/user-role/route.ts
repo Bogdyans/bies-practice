@@ -15,7 +15,7 @@ export async function GET(request: NextRequest) {
     try {
         const profileData = await ProfileController.getUserRoleById(decoded.id);
 
-        return NextResponse.json({ userRole: profileData == 1 ? "admin" : null }, { status: 200 });
+        return NextResponse.json({ userRole: profileData.role == 1 ? "admin" : null, isResponsible: profileData.isResponsible ? "true" : null }, { status: 200 });
     } catch {
         return NextResponse.json({ error: "Error getting profile" }, { status: 500 });
     }

@@ -31,4 +31,32 @@ export class AnswerersModel{
             throw error;
         }
     }
+
+    static async isResponsible(client: PoolClient, userId: number) {
+        const query = `
+            SELECT * FROM answer_people
+            WHERE user_profile_id = $1;
+        `
+
+        try {
+            const result = await client.query(query, [userId]);
+            return result.rows[0] ?? false;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    static async getResponsobilitiesForUser(client: PoolClient, userId: number) {
+        const query = `
+            SELECT question_theme_id
+            FROM answer_people
+            WHERE user_profile_id = $1;
+        `
+        try {
+            const result = await client.query(query, [userId]);
+            return result.rows;
+        } catch (error) {
+            throw error;
+        }
+    }
 }

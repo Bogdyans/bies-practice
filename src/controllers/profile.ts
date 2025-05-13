@@ -1,5 +1,6 @@
 import pool from "@/lib/db";
 import UserModel from "@/models/user";
+import {AnswerersModel} from "@/models/answerers";
 
 
 export default class ProfileController {
@@ -23,8 +24,9 @@ export default class ProfileController {
 
         try {
             const profileData = await UserModel.findById(client, id);
+            const isResponsible = await AnswerersModel.isResponsible(client, id);
 
-            return profileData.role_id;
+            return { role: profileData.role_id, isResponsible: isResponsible };
         } catch (error) {
             console.log(error);
             throw(error);

@@ -116,7 +116,7 @@ export default class UserModel {
 
     static async getOrganizationForUser(client: PoolClient, userId: number) {
         const query = `
-            SELECT org.id as id
+            SELECT org.*
             FROM organizations org
             JOIN otdels o ON o.organization_id = org.id
             JOIN user_profiles u ON u.otdel_id = o.id
@@ -126,7 +126,7 @@ export default class UserModel {
         try {
             const orgId = await client.query(query, [userId]);
 
-            return orgId.rows[0].id;
+            return orgId.rows[0];
         } catch (error) {
             throw error;
         }

@@ -64,7 +64,7 @@ export default function AssignResponsiblePage() {
         const fetchThemes = async () => {
             setLoadingThemes(true)
             try {
-                const response = await fetch(`/api/admin/fetch-info/themes?organizationId=${selectedOrganization}`)
+                const response = await fetch(`/api//themes?organizationId=${selectedOrganization}`)
                 const responseUsers = await fetch(`/api/admin/fetch-info/users?organizationId=${selectedOrganization}`)
                 const data = await response.json()
                 const dataUsers = await responseUsers.json()
